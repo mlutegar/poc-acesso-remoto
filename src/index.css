@@ -22,9 +22,375 @@
   --c-ink: 226 232 242;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
 }
 body {
   @apply bg-bg text-ink font-sans antialiased;
+}
+
+.op-shell {
+  @apply flex h-full flex-col;
+}
+.op-content {
+  @apply flex min-h-0 flex-1 flex-col overflow-auto;
+}
+.op-header {
+  @apply relative z-20 shrink-0 bg-navy text-white;
+}
+.op-header-inner {
+  @apply mx-auto flex max-w-[1440px] items-center gap-6 px-6 py-5;
+}
+.op-brand {
+  @apply flex items-center gap-3;
+}
+.op-brand strong {
+  @apply block text-xl font-bold tracking-tight;
+}
+.op-brand small {
+  @apply block text-[9px] tracking-[.18em] text-white/50;
+}
+.op-condominium {
+  @apply ml-8 border-l border-white/15 pl-6 text-xs;
+}
+.op-condominium strong,
+.op-condominium small {
+  @apply block;
+}
+.op-condominium small {
+  @apply mt-1 text-white/50;
+}
+.op-demo-badge {
+  @apply ml-auto rounded-full border border-white/20 px-3 py-1 text-[10px] font-medium text-white/75;
+}
+.op-account {
+  @apply flex items-center gap-3 text-xs;
+}
+.op-account button {
+  @apply rounded-md bg-white/10 px-3 py-2 hover:bg-white/20;
+}
+.op-nav {
+  @apply mx-auto flex max-w-[1440px] items-stretch gap-1 px-6;
+}
+.op-nav > a,
+.op-admin > summary {
+  @apply block cursor-pointer whitespace-nowrap border-b-[3px] border-transparent px-5 py-4 text-xs font-semibold uppercase tracking-wide text-white/60 hover:bg-white/5 hover:text-white;
+}
+.op-nav > a.active {
+  @apply border-blue bg-white/5 text-white;
+}
+.op-admin {
+  @apply relative;
+}
+.op-admin summary {
+  list-style: none;
+}
+.op-admin summary::-webkit-details-marker {
+  display: none;
+}
+.op-admin > div {
+  @apply absolute right-0 top-full w-64 rounded-b-lg border border-ink/10 bg-card p-2 text-ink shadow-xl;
+}
+.op-admin > div > a {
+  @apply block rounded px-3 py-2 text-sm hover:bg-bg;
+}
+.op-theme {
+  @apply border-t border-ink/10 px-3 py-3;
+}
+.op-main {
+  @apply mx-auto w-full max-w-[1360px] px-6 pb-10 pt-8;
+}
+.op-breadcrumb {
+  @apply mb-6 flex gap-3 text-[9px] font-semibold tracking-[.12em] text-ink/40;
+}
+.op-breadcrumb span {
+  @apply text-ink/20;
+}
+.op-page-heading {
+  @apply mb-7 flex items-center justify-between gap-4;
+}
+.op-page-heading h1 {
+  @apply text-3xl font-bold tracking-tight;
+}
+.op-page-heading p {
+  @apply mt-2 text-xs text-ink/55;
+}
+.op-button {
+  @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md border border-ink/15 bg-card px-4 py-2.5 text-xs font-semibold text-ink transition hover:bg-bg disabled:cursor-not-allowed disabled:opacity-40;
+}
+.op-button.primary {
+  @apply border-blue bg-blue text-white hover:opacity-90;
+}
+.op-button.small {
+  @apply px-3 py-2 text-[11px];
+}
+.op-stats {
+  @apply mb-7 grid grid-cols-4 gap-4;
+}
+.op-stat {
+  @apply rounded-lg border border-ink/10 bg-card px-5 py-4;
+}
+.op-stat > span {
+  @apply block text-xs font-medium text-ink/55;
+}
+.op-stat strong {
+  @apply my-2 block text-3xl font-semibold;
+}
+.op-stat small {
+  @apply text-[10px] text-ink/40;
+}
+.text-green {
+  @apply text-success;
+}
+.text-amber {
+  @apply text-warning;
+}
+.text-navy {
+  @apply text-ink;
+}
+.op-panel {
+  @apply rounded-lg border border-ink/10 bg-card shadow-sm;
+}
+.op-panel-top {
+  @apply flex items-center justify-between gap-3 border-b border-ink/10 px-5;
+}
+.op-tabs {
+  @apply flex gap-5;
+}
+.op-tabs button {
+  @apply border-b-2 border-transparent py-4 text-xs font-medium text-ink/50;
+}
+.op-tabs .selected {
+  @apply border-blue text-blue;
+}
+.op-filters {
+  @apply flex flex-wrap items-center gap-3 px-5 py-5;
+}
+.op-search {
+  @apply flex min-w-48 flex-1 items-center gap-2 rounded-md border border-ink/15 bg-bg/40 px-3 text-ink/45;
+}
+.op-search input {
+  @apply w-full border-0 bg-transparent py-2.5 text-xs text-ink outline-none;
+}
+.op-filters select {
+  @apply max-w-full rounded-md border border-ink/15 bg-card px-3 py-2.5 text-xs;
+}
+.op-table-wrap {
+  @apply overflow-x-auto;
+}
+.op-table {
+  @apply w-full text-left text-xs;
+  min-width: 850px;
+}
+.op-table th {
+  @apply border-y border-ink/10 bg-bg/60 px-5 py-3 text-[9px] font-semibold uppercase tracking-wider text-ink/45;
+}
+.op-table td {
+  @apply border-b border-ink/5 px-5 py-5 align-middle;
+}
+.op-table tbody tr:last-child td {
+  @apply border-0;
+}
+.op-table tbody tr:hover {
+  @apply bg-bg/40;
+}
+.op-table strong {
+  @apply text-xs font-semibold;
+}
+.op-table small {
+  @apply mt-1.5 block max-w-xs text-[10px] leading-relaxed text-ink/50;
+}
+.op-actions {
+  @apply flex max-w-[220px] flex-wrap gap-x-3 gap-y-2;
+}
+.op-text-button {
+  @apply text-[11px] font-medium text-blue hover:underline;
+}
+.op-text-button.danger {
+  @apply text-danger;
+}
+.op-badge {
+  @apply inline-flex whitespace-nowrap rounded-full px-2.5 py-1 text-[10px] font-semibold;
+}
+.op-badge.green {
+  @apply bg-success/10 text-success;
+}
+.op-badge.amber {
+  @apply bg-warning/10 text-amber-700;
+}
+.op-badge.gray {
+  @apply bg-ink/5 text-ink/50;
+}
+.op-badge.red {
+  @apply bg-danger/10 text-danger;
+}
+.op-empty {
+  @apply px-5 py-16 text-center;
+}
+.op-empty > span {
+  @apply mb-2 inline-block text-4xl text-ink/25;
+}
+.op-empty h3 {
+  @apply text-sm font-semibold text-ink/60;
+}
+.op-empty p {
+  @apply mt-2 text-xs text-ink/45;
+}
+.op-list-footer {
+  @apply flex items-center justify-between gap-3 border-t border-ink/10 px-5 py-3 text-[10px] text-ink/50;
+}
+.op-list-footer > div {
+  @apply flex gap-2;
+}
+.op-footnote {
+  @apply mt-5 text-center text-[10px] text-ink/40;
+}
+.op-dialog {
+  @apply m-auto max-h-[90vh] max-w-2xl rounded-xl border border-ink/10 bg-card p-0 text-ink shadow-2xl;
+  width: calc(100% - 2rem);
+}
+.op-dialog::backdrop {
+  background: rgb(6 16 32 / 0.55);
+  backdrop-filter: blur(3px);
+}
+.op-dialog-head {
+  @apply sticky top-0 z-10 flex items-center justify-between border-b border-ink/10 bg-card px-6 py-5;
+}
+.op-dialog-head h2 {
+  @apply mt-1 text-xl font-semibold;
+}
+.op-eyebrow {
+  @apply text-[9px] font-semibold tracking-wider text-ink/40;
+}
+.op-icon {
+  @apply flex h-8 w-8 items-center justify-center rounded-md bg-bg text-xl text-ink/60;
+}
+.op-form {
+  @apply space-y-5 p-6;
+}
+.op-muted {
+  @apply text-xs leading-relaxed text-ink/50;
+}
+.op-form-grid {
+  @apply grid grid-cols-2 gap-4;
+}
+.op-field {
+  @apply block space-y-2 text-xs font-medium;
+}
+.op-field input,
+.op-field select,
+.op-field textarea {
+  @apply block w-full rounded-md border border-ink/20 bg-card px-3 py-2.5 text-sm font-normal;
+}
+.op-field textarea {
+  @apply resize-y;
+}
+.op-checks {
+  @apply flex flex-wrap gap-4;
+}
+.op-check {
+  @apply flex items-center gap-2 text-xs;
+}
+.op-check input,
+.op-days input {
+  accent-color: rgb(var(--c-blue));
+}
+.op-section-label {
+  @apply border-b border-ink/10 pb-2 text-[10px] font-semibold uppercase tracking-wider text-ink/50;
+}
+.op-form-footer {
+  @apply flex justify-end gap-3 border-t border-ink/10 pt-5;
+}
+.op-error {
+  @apply rounded-md border border-danger/20 bg-danger/5 p-3 text-xs leading-relaxed text-danger;
+}
+.op-notice {
+  @apply mb-4 flex items-center justify-between gap-4 rounded-md border border-success/20 bg-success/5 p-3 text-xs text-success;
+}
+.op-notice button {
+  @apply text-lg;
+}
+.op-hint {
+  @apply rounded-md bg-blue/5 p-3 text-xs leading-relaxed text-blue;
+}
+.op-days legend {
+  @apply mb-3 text-xs font-medium;
+}
+.op-days label {
+  @apply mr-3 inline-flex items-center gap-1.5 text-xs;
+}
+.op-timeline {
+  @apply space-y-5 border-l border-ink/15 pl-5 text-sm;
+}
+.op-timeline small {
+  @apply mt-1 block text-xs text-ink/50;
+}
+:where(button, a, input, select, textarea, summary):focus-visible {
+  outline: 2px solid rgb(var(--c-blue));
+  outline-offset: 3px;
+}
+@media (max-width: 760px) {
+  .op-header-inner {
+    @apply gap-3 px-4 py-3;
+  }
+  .op-condominium,
+  .op-account > span {
+    @apply hidden;
+  }
+  .op-brand strong {
+    @apply text-base;
+  }
+  .op-brand small {
+    font-size: 7px;
+  }
+  .op-demo-badge {
+    @apply px-2 text-[8px];
+  }
+  .op-nav {
+    @apply flex-wrap gap-0 px-2;
+  }
+  .op-nav > a,
+  .op-admin > summary {
+    @apply px-3 py-3 text-[9px];
+  }
+  .op-admin > div {
+    @apply left-0 right-auto;
+  }
+  .op-main {
+    @apply px-4 pt-5;
+  }
+  .op-page-heading {
+    @apply flex-wrap;
+  }
+  .op-page-heading h1 {
+    @apply text-2xl;
+  }
+  .op-stats {
+    @apply grid-cols-2 gap-3;
+  }
+  .op-stat {
+    @apply px-4 py-3;
+  }
+  .op-panel-top,
+  .op-filters {
+    @apply px-3;
+  }
+  .op-filters select {
+    @apply flex-1;
+  }
+  .op-form-grid {
+    @apply grid-cols-1;
+  }
+  .op-breadcrumb {
+    @apply text-[8px];
+  }
+  .op-list-footer {
+    @apply flex-wrap;
+  }
+  .op-dialog-head,
+  .op-form {
+    @apply px-4;
+  }
 }

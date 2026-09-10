@@ -17,6 +17,7 @@ npm run typecheck # tsc --noEmit
 ```
 
 ## Funcionalidades
+- **Portaria local (primeiro bloco Shielder)**: residências, condôminos, visitas e pré-autorizações, com cadastros relacionados, persistência local, filtros, CSV e histórico. Veja [escopo e validação](docs/IMPLEMENTACAO-SHIELDER.md). A página inicial agora é `/visitas`; o painel simulado anterior está em `/operacao`.
 - **Login** com rota protegida (`RequireAuth`) — sem sessão, redireciona para `/login`.
 - **Operação (Dashboard)**: cards de resumo + **feed ao vivo** (novos eventos entrando em tempo real, com pausa) + status visual grande (🟢🔴🟠).
 - **Ações de portaria** nos cards: abrir porta / interfone / negar (toast de confirmação).
