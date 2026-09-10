@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { Feedback, History, Pagination, Tabs, useListParams, PAGE_SIZE } from "./List";
+import { Icon } from "../components/Icons";
 import { useOperations } from "./Store";
 import {
   audienceLabels,
@@ -108,34 +109,14 @@ export default function Notices() {
 
   return (
     <main className="op-main">
-      <div className="op-breadcrumb">
-        CONDOMÍNIO MODELO <span>/</span> PORTARIA <span>/</span> COMUNICADOS
-      </div>
       <div className="op-page-heading">
         <div>
           <h1>Comunicados</h1>
           <p>Programe o que será publicado, para quem vale e quando deixa de valer.</p>
         </div>
         <button className="op-button primary" onClick={() => setEdit({})}>
-          ＋ Novo comunicado
+          <Icon name="plus" /> Novo comunicado
         </button>
-      </div>
-      <div className="op-stats">
-        {[
-          ["Ativos agora", data.notices.filter((n) => noticeState(n) === "ativo").length, "green"],
-          ["Agendados", data.notices.filter((n) => noticeState(n) === "agendado").length, "amber"],
-          [
-            "Finalizados",
-            data.notices.filter((n) => noticeState(n) === "finalizado").length,
-            "navy",
-          ],
-        ].map(([label, value, color]) => (
-          <div className="op-stat" key={label}>
-            <span>{label}</span>
-            <strong className={`text-${color}`}>{value}</strong>
-            <small>Horário de Brasília</small>
-          </div>
-        ))}
       </div>
       <Feedback notice={notice} error={storageError || error} onDismiss={() => setNotice("")} />
       <section className="op-panel" aria-label="Lista de comunicados">
@@ -151,12 +132,14 @@ export default function Notices() {
             onSelect={(value) => update("tab", value)}
           />
           <button className="op-button small" onClick={exportRows}>
-            ↓ Exportar CSV
+            <Icon name="download" /> Exportar CSV
           </button>
         </div>
         <div className="op-filters">
           <label className="op-search">
-            <span aria-hidden>⌕</span>
+            <span aria-hidden>
+              <Icon name="search" />
+            </span>
             <input
               aria-label="Buscar comunicados"
               placeholder="Buscar assunto, texto, destino…"
@@ -279,10 +262,6 @@ export default function Notices() {
         )}
         <Pagination total={visible.length} page={page} onGo={goTo} />
       </section>
-      <p className="op-footnote">
-        Demonstração local · O comunicado muda de estado pelo horário, mas nenhum email ou
-        notificação é disparado.
-      </p>
       {edit && (
         <Modal
           title={edit.item ? "Editar comunicado" : "Novo comunicado"}

@@ -12,6 +12,7 @@ A usuária quer reproduzir o aplicativo usado pelo cliente a partir do Shielder 
 - Conferência visual do padrão desktop e leitura dos principais fluxos de dados.
 - Primeiro bloco implementado após a auditoria: navegação horizontal, residências, condôminos, visitas e pré-autorizações. Detalhes em `docs/IMPLEMENTACAO-SHIELDER.md`.
 - Segundo bloco implementado: correspondências, ocorrências com respostas e comunicados com agendamento, mais a migração dos dados locais para `version: 2`. Detalhes no mesmo arquivo.
+- Terceiro bloco: camada visual no padrão do sistema de referência (cabeçalho, menu completo com submenus, listagens, formulários, login), com paleta própria. Tokens medidos: fundo `#eee`, texto `#333`, azul da referência `#102372` (não copiado; usa-se o navy do preset), Helvetica Neue 14px, título 28px, cabeçalho de tabela `#e0e0e0` 16px, zebra `#f9f9f9`, botão pequeno `#f5f5f5` 12px, busca 410×30px, tabela 940px.
 - Nenhum formulário foi enviado nem equipamento acionado durante a consulta. Aba devolvida a Comunicados.
 
 ## Como continuar sem repetir a auditoria

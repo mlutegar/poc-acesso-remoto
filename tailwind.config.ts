@@ -18,9 +18,12 @@ export default {
         danger: c("--c-danger"),
         warning: c("--c-warning"),
         ink: c("--c-ink"),
+        line: c("--c-line"),
+        stripe: c("--c-stripe"),
+        head: c("--c-head"),
       },
       fontFamily: {
-        sans: ["Inter", "system-ui", "Segoe UI", "sans-serif"],
+        sans: ["Helvetica Neue", "Helvetica", "Arial", "sans-serif"],
       },
       boxShadow: {
         card: "0 1px 3px rgb(var(--c-ink) / 0.08), 0 1px 2px rgb(var(--c-ink) / 0.04)",

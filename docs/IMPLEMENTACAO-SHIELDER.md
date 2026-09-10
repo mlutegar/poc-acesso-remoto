@@ -76,3 +76,26 @@ As regras de rastreio único, desfecho obrigatório no encerramento e destino se
 ## Estrutura
 
 As três telas ficaram em `src/operations/Mail.tsx`, `Issues.tsx` e `Notices.tsx`, com os controles comuns em `List.tsx`. O formulário genérico do bloco 1 (`Forms.tsx`) continua atendendo apenas residências, condôminos, visitas e pré-autorizações, agora pelo tipo `CoreCollection`; cada módulo novo traz o seu próprio formulário, porque os campos e as regras não se sobrepõem.
+
+# Terceiro bloco — camada visual no padrão da referência — 10/09/2026
+
+## Entregue
+
+- Estrutura visual reproduzida a partir de capturas e dos estilos computados do sistema de referência, mantendo a paleta e a marca próprias (presets Portaris, Vigio e Sentric continuam funcionando): fundo cinza-claro `#eee`, texto `#333`, Helvetica Neue 14px/20px, títulos de página em caixa alta 28px, botão principal em azul-escuro, botões pequenos cinza em caixa alta, abas com a ativa em selo azul-escuro, busca centralizada de 410px, tabela zebrada de 940px com cabeçalho cinza em caixa alta.
+- Cabeçalho em duas faixas: identificação, telefone, atalhos (anotações, notificações, procedimentos), nome do condomínio e usuário em cima; barra de menu com canto inferior direito arredondado embaixo. Submenus em cascata com os mesmos grupos do original.
+- Menu completo com os 7 itens e os 33 subitens de Administração. Os itens sem tela abrem uma página de módulo previsto (`src/pages/Previsto.tsx`) com o que faz, o que vai ter e do que depende, alinhada à planilha de cobertura.
+- Ícones em SVG inline (`src/components/Icons.tsx`) no lugar dos glifos unicode; formulários em janela com o mesmo tratamento das telas de cadastro (título em caixa alta, rótulos em negrito, campos de 35px, botão Salvar largo); estado vazio como faixa cinza "Nenhum registro encontrado!"; login sóbrio com a mesma faixa azul-escura.
+- Cartões de estatística, breadcrumb, selo "Demonstração local" e rodapés de aviso saíram das listagens. O aviso de demonstração ficou no menu do usuário e no login.
+
+## Verificação
+
+- `npm run build`, `npx eslint` e `npm test` (18 testes) sem erros. O servidor de desenvolvimento precisou ser reiniciado para carregar as cores novas do `tailwind.config.ts`.
+- Conferido no navegador: login, Visitas, Correspondências, Ocorrências, formulário de nova correspondência, submenu Administração › Gestão, página de módulo previsto (Usuários) e o painel simulado antigo.
+
+## Limites
+
+- Reprodução a olho, a partir de capturas e de estilos computados; não é cópia do CSS nem pixel a pixel. Logo, nome e cores exatas do sistema de referência não foram copiados de propósito.
+- Os formulários continuam em janela; no original são páginas próprias ("Cadastro de visitante"). O tratamento visual é o mesmo, a navegação não.
+- As listagens do original mostram foto do visitante/morador e uma linha com criação/atualização por registro; aqui não há fotos e o histórico fica em janela.
+- As páginas de exemplo anteriores (painel, eventos, veículos, dispositivos) mantêm a aparência antiga de cartões; o painel operacional do próprio original também usa cartões modernos, então a diferença é aceitável para a demonstração.
+- Capturas do sistema de referência ficaram fora do repositório por conterem dados de moradores.

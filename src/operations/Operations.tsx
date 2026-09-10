@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Editor, type Edit } from "./Forms";
+import { Icon } from "../components/Icons";
 import { useOperations } from "./Store";
 import {
   matchingPermit,
@@ -59,9 +60,6 @@ export default function Operations({ kind }: { kind: CoreCollection }) {
     );
   const residentFor = (v: Visit | Permit) => data.residents.find((r) => r.id === v.residentId);
   const home = (r?: Resident) => data.units.find((u) => u.id === r?.unitId);
-  const activeVisits = data.visits.filter((v) =>
-    ["pendente", "autorizada", "presente"].includes(v.status)
-  );
   const source = data[kind] as (Unit | Resident | Permit | Visit)[];
   const visible = source
     .filter((row) => {
@@ -185,9 +183,6 @@ export default function Operations({ kind }: { kind: CoreCollection }) {
   );
   return (
     <main className="op-main">
-      <div className="op-breadcrumb">
-        CONDOMÍNIO MODELO <span>/</span> PORTARIA <span>/</span> {labels[kind].toUpperCase()}
-      </div>
       <div className="op-page-heading">
         <div>
           <h1>{labels[kind]}</h1>
@@ -200,36 +195,9 @@ export default function Operations({ kind }: { kind: CoreCollection }) {
           </p>
         </div>
         <button className="op-button primary" onClick={() => setEdit({ kind })}>
-          ＋ {createLabels[kind]}
+          <Icon name="plus" /> {createLabels[kind]}
         </button>
       </div>
-      {kind === "visits" && (
-        <div className="op-stats">
-          {[
-            ["Em andamento", activeVisits.length, "navy"],
-            ["Aguardando", data.visits.filter((v) => v.status === "pendente").length, "amber"],
-            ["No condomínio", data.visits.filter((v) => v.status === "presente").length, "green"],
-            [
-              "Pré-autorizadas agora",
-              data.permits.filter(
-                (p) =>
-                  permitValid(p) && data.residents.some((r) => r.id === p.residentId && r.active)
-              ).length,
-              "blue",
-            ],
-          ].map(([label, value, color]) => (
-            <div className="op-stat" key={label}>
-              <span>{label}</span>
-              <strong className={`text-${color}`}>{value}</strong>
-              <small>
-                {label === "Pré-autorizadas agora"
-                  ? "Horário de Brasília"
-                  : "Registros desta demonstração"}
-              </small>
-            </div>
-          ))}
-        </div>
-      )}
       {storageError && (
         <p role="alert" className="op-error">
           {storageError}
@@ -264,12 +232,14 @@ export default function Operations({ kind }: { kind: CoreCollection }) {
             ))}
           </div>
           <button className="op-button small" onClick={exportRows}>
-            ↓ Exportar CSV
+            <Icon name="download" /> Exportar CSV
           </button>
         </div>
         <div className="op-filters">
           <label className="op-search">
-            <span aria-hidden>⌕</span>
+            <span aria-hidden>
+              <Icon name="search" />
+            </span>
             <input
               aria-label="Buscar registros"
               placeholder={
@@ -578,9 +548,6 @@ export default function Operations({ kind }: { kind: CoreCollection }) {
           </div>
         </footer>
       </section>
-      <p className="op-footnote">
-        Demonstração local · Os registros não acionam equipamentos nem enviam notificações.
-      </p>
       {edit && (
         <Editor
           edit={edit}

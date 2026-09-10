@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { useAuth } from "../auth/AuthProvider";
 import { Feedback, History, Pagination, Tabs, useListParams, PAGE_SIZE } from "./List";
+import { Icon } from "../components/Icons";
 import { useOperations } from "./Store";
 import { mailLabels, normalize, unitName, type Mail, type Resident } from "./model";
 import { downloadCsv, Empty, Field, formatDate, Modal } from "./UI";
@@ -22,7 +23,6 @@ export default function MailPage() {
   const activeResidents = data.residents.filter(
     (r) => r.active && data.units.some((u) => u.id === r.unitId && u.active)
   );
-  const waiting = data.mail.filter((m) => m.status !== "retirada");
 
   const visible = data.mail
     .filter((m) => {
@@ -106,34 +106,14 @@ export default function MailPage() {
 
   return (
     <main className="op-main">
-      <div className="op-breadcrumb">
-        CONDOMÍNIO MODELO <span>/</span> PORTARIA <span>/</span> CORRESPONDÊNCIAS
-      </div>
       <div className="op-page-heading">
         <div>
           <h1>Correspondências</h1>
           <p>Registre o que chega na portaria, avise o destinatário e comprove a retirada.</p>
         </div>
         <button className="op-button primary" onClick={() => setEdit({})}>
-          ＋ Nova correspondência
+          <Icon name="plus" /> Nova correspondência
         </button>
-      </div>
-      <div className="op-stats">
-        {[
-          ["Aguardando retirada", waiting.length, "navy"],
-          [
-            "Sem aviso ao destinatário",
-            data.mail.filter((m) => m.status === "recebida").length,
-            "amber",
-          ],
-          ["Retiradas", data.mail.filter((m) => m.status === "retirada").length, "green"],
-        ].map(([label, value, color]) => (
-          <div className="op-stat" key={label}>
-            <span>{label}</span>
-            <strong className={`text-${color}`}>{value}</strong>
-            <small>Registros desta demonstração</small>
-          </div>
-        ))}
       </div>
       <Feedback notice={notice} error={storageError} onDismiss={() => setNotice("")} />
       <section className="op-panel" aria-label="Lista de correspondências">
@@ -148,12 +128,14 @@ export default function MailPage() {
             onSelect={(value) => update("tab", value)}
           />
           <button className="op-button small" onClick={exportRows}>
-            ↓ Exportar CSV
+            <Icon name="download" /> Exportar CSV
           </button>
         </div>
         <div className="op-filters">
           <label className="op-search">
-            <span aria-hidden>⌕</span>
+            <span aria-hidden>
+              <Icon name="search" />
+            </span>
             <input
               aria-label="Buscar correspondências"
               placeholder="Buscar morador, residência, rastreio, descrição…"
@@ -277,10 +259,6 @@ export default function MailPage() {
         )}
         <Pagination total={visible.length} page={page} onGo={goTo} />
       </section>
-      <p className="op-footnote">
-        Demonstração local · O aviso ao destinatário é registrado, mas nenhuma notificação é
-        enviada.
-      </p>
       {edit && (
         <Modal
           title={edit.item ? "Editar correspondência" : "Nova correspondência"}

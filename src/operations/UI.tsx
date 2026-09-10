@@ -18,7 +18,6 @@ export function Modal({
     <dialog ref={ref} className="op-dialog" onCancel={onClose} aria-labelledby="dialog-title">
       <div className="op-dialog-head">
         <div>
-          <span className="op-eyebrow">PORTARIA · CADASTRO LOCAL</span>
           <h2 id="dialog-title">{title}</h2>
         </div>
         <button type="button" className="op-icon" onClick={onClose} aria-label="Fechar janela">
@@ -73,8 +72,7 @@ export function Check({ label, name, checked }: { label: string; name: string; c
 export function Empty({ text }: { text: string }) {
   return (
     <div className="op-empty">
-      <span aria-hidden>⌕</span>
-      <h3>Nenhum registro encontrado</h3>
+      <h3>Nenhum registro encontrado!</h3>
       <p>{text}</p>
     </div>
   );

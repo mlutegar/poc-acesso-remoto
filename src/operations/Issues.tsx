@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { useAuth } from "../auth/AuthProvider";
 import { Feedback, History, Pagination, Tabs, useListParams, PAGE_SIZE } from "./List";
+import { Icon } from "../components/Icons";
 import { useOperations } from "./Store";
 import { issueLabels, normalize, unitName, type Issue, type Resident } from "./model";
 import { Check, downloadCsv, Empty, Field, formatDate, Modal } from "./UI";
@@ -116,9 +117,6 @@ export default function Issues() {
 
   return (
     <main className="op-main">
-      <div className="op-breadcrumb">
-        CONDOMÍNIO MODELO <span>/</span> PORTARIA <span>/</span> OCORRÊNCIAS
-      </div>
       <div className="op-page-heading">
         <div>
           <h1>Ocorrências</h1>
@@ -127,21 +125,8 @@ export default function Issues() {
           </p>
         </div>
         <button className="op-button primary" onClick={() => setEdit({})}>
-          ＋ Nova ocorrência
+          <Icon name="plus" /> Nova ocorrência
         </button>
-      </div>
-      <div className="op-stats">
-        {[
-          ["Abertas", data.issues.filter((i) => i.status === "aberta").length, "navy"],
-          ["Fixadas", data.issues.filter((i) => i.pinned && i.status === "aberta").length, "amber"],
-          ["Encerradas", data.issues.filter((i) => i.status === "encerrada").length, "green"],
-        ].map(([label, value, color]) => (
-          <div className="op-stat" key={label}>
-            <span>{label}</span>
-            <strong className={`text-${color}`}>{value}</strong>
-            <small>Registros desta demonstração</small>
-          </div>
-        ))}
       </div>
       <Feedback notice={notice} error={storageError} onDismiss={() => setNotice("")} />
       <section className="op-panel" aria-label="Lista de ocorrências">
@@ -157,12 +142,14 @@ export default function Issues() {
             onSelect={(value) => update("tab", value)}
           />
           <button className="op-button small" onClick={exportRows}>
-            ↓ Exportar CSV
+            <Icon name="download" /> Exportar CSV
           </button>
         </div>
         <div className="op-filters">
           <label className="op-search">
-            <span aria-hidden>⌕</span>
+            <span aria-hidden>
+              <Icon name="search" />
+            </span>
             <input
               aria-label="Buscar ocorrências"
               placeholder="Buscar descrição, local, condômino…"
@@ -211,8 +198,7 @@ export default function Issues() {
                   <tr key={i.id}>
                     <td>
                       <strong>
-                        {i.pinned && i.status === "aberta" ? "📌 " : ""}
-                        {i.description}
+                        {i.pinned && i.status === "aberta" && <Icon name="pin" />} {i.description}
                       </strong>
                       <small>
                         {i.kind} · registrada por {i.reporter}
@@ -280,9 +266,6 @@ export default function Issues() {
         )}
         <Pagination total={visible.length} page={page} onGo={goTo} />
       </section>
-      <p className="op-footnote">
-        Demonstração local · Notificar síndico e funcionários fica registrado, mas nada é enviado.
-      </p>
       {edit && (
         <Modal
           title={edit.item ? "Editar ocorrência" : "Nova ocorrência"}
