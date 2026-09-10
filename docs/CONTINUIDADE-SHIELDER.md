@@ -16,7 +16,7 @@ A usuária quer reproduzir o aplicativo usado pelo cliente a partir do Shielder 
 
 ## Como continuar sem repetir a auditoria
 
-1. Ler o mapa local e conferir o estado atual do código. Não reler as 77 telas.
+1. Ler o mapa local e a cobertura em `docs/COBERTURA-SHIELDER.md`, e conferir o estado atual do código. Não reler as 77 telas.
 2. Usar as etapas e critérios de aceite da seção 8 como sequência de implementação.
 3. Retornar ao Shielder somente para a dúvida concreta do fluxo em desenvolvimento, com a sessão atual identificada novamente se necessário.
 4. Extrair títulos, rótulos, cabeçalhos, controles e ações; omitir valores dos cadastros. Deduplicar controles e links repetidos antes de exibir resultados.
