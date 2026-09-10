@@ -11,6 +11,7 @@ A usuária quer reproduzir o aplicativo usado pelo cliente a partir do Shielder 
 - Mapa estrutural de 77 rotas de Shielder, incluindo formulários e parâmetros.
 - Conferência visual do padrão desktop e leitura dos principais fluxos de dados.
 - Primeiro bloco implementado após a auditoria: navegação horizontal, residências, condôminos, visitas e pré-autorizações. Detalhes em `docs/IMPLEMENTACAO-SHIELDER.md`.
+- Segundo bloco implementado: correspondências, ocorrências com respostas e comunicados com agendamento, mais a migração dos dados locais para `version: 2`. Detalhes no mesmo arquivo.
 - Nenhum formulário foi enviado nem equipamento acionado durante a consulta. Aba devolvida a Comunicados.
 
 ## Como continuar sem repetir a auditoria
@@ -30,6 +31,10 @@ A usuária quer reproduzir o aplicativo usado pelo cliente a partir do Shielder 
 - App do morador e módulos invisíveis no perfil web observado.
 - Protocolo e ambiente de testes dos equipamentos físicos.
 
-## Próxima entrega sugerida após o primeiro bloco
+## Próxima entrega sugerida após o segundo bloco
 
-Correspondências com recebimento, destinatário e retirada; ocorrências e respostas; comunicados com estados e agendamento. Reutilizar `src/operations` para dados e controles comuns, mantendo as regras próprias de cada fluxo. A navegação atual inclui apenas módulos implementados e os painéis de exemplo anteriores, identificados como simulados.
+Etapa 4 do mapa: usuários e perfis, com as permissões efetivamente aplicadas às telas já existentes, e os parâmetros por condomínio que mudam os campos exigidos nos formulários. É o primeiro bloco em que a auditoria encontrou regras que alteram o comportamento do que já foi construído, e não apenas cadastros novos.
+
+Antes disso, vale decidir com a cliente o que motivou o projeto: o mapa registra como pendência as reclamações concretas sobre o Shielder. Elas mudam o que compensa reproduzir fielmente e o que compensa fazer diferente.
+
+A navegação atual inclui apenas módulos implementados e os painéis de exemplo anteriores, identificados como simulados.

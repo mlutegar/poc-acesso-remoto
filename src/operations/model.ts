@@ -57,6 +57,64 @@ export interface Visit {
   exitAt: string;
   permitId: string;
 }
+export type MailStatus = "recebida" | "avisada" | "retirada";
+export interface Mail {
+  id: string;
+  residentId: string;
+  description: string;
+  tracking: string;
+  carrier: string;
+  receivedBy: string;
+  attachment: string;
+  notes: string;
+  status: MailStatus;
+  createdAt: string;
+  noticedAt: string;
+  pickupAt: string;
+  pickedBy: string;
+}
+export interface Reply {
+  id: string;
+  at: string;
+  author: string;
+  text: string;
+}
+export type IssueStatus = "aberta" | "encerrada";
+export interface Issue {
+  id: string;
+  kind: string;
+  description: string;
+  place: string;
+  residentId: string;
+  reporter: string;
+  shared: boolean;
+  pinned: boolean;
+  notify: boolean;
+  attachment: string;
+  status: IssueStatus;
+  createdAt: string;
+  closedAt: string;
+  replies: Reply[];
+}
+export type NoticeAudience = "todos" | "proprietarios" | "unidade";
+export type NoticeState = "agendado" | "ativo" | "finalizado";
+export interface Notice {
+  id: string;
+  subject: string;
+  body: string;
+  audience: NoticeAudience;
+  unitId: string;
+  attachment: string;
+  start: string;
+  startTime: string;
+  end: string;
+  endTime: string;
+  email: boolean;
+  push: boolean;
+  tenants: boolean;
+  finished: boolean;
+  createdAt: string;
+}
 export interface Log {
   id: string;
   entityId: string;
@@ -65,15 +123,21 @@ export interface Log {
   message: string;
 }
 export interface Data {
-  version: 1;
+  version: 2;
   revision: number;
   units: Unit[];
   residents: Resident[];
   permits: Permit[];
   visits: Visit[];
+  mail: Mail[];
+  issues: Issue[];
+  notices: Notice[];
   logs: Log[];
 }
-export type Collection = "units" | "residents" | "permits" | "visits";
+// Cadastros atendidos pelo formulário genérico do bloco 1.
+export type CoreCollection = "units" | "residents" | "permits" | "visits";
+export type Collection = CoreCollection | "mail" | "issues" | "notices";
+export type Entity = Unit | Resident | Permit | Visit | Mail | Issue | Notice;
 export const normalize = (s: string) =>
   s
     .normalize("NFD")
@@ -87,6 +151,25 @@ export const statusLabels: Record<VisitStatus, string> = {
   presente: "No condomínio",
   negada: "Acesso negado",
   finalizada: "Finalizada",
+};
+export const mailLabels: Record<MailStatus, string> = {
+  recebida: "Na portaria",
+  avisada: "Destinatário avisado",
+  retirada: "Retirada",
+};
+export const issueLabels: Record<IssueStatus, string> = {
+  aberta: "Aberta",
+  encerrada: "Encerrada",
+};
+export const noticeLabels: Record<NoticeState, string> = {
+  agendado: "Agendado",
+  ativo: "Ativo",
+  finalizado: "Finalizado",
+};
+export const audienceLabels: Record<NoticeAudience, string> = {
+  todos: "Todos os condôminos",
+  proprietarios: "Somente proprietários",
+  unidade: "Uma residência",
 };
 export function localClock(now = new Date()) {
   const parts = new Intl.DateTimeFormat("sv-SE", {
@@ -117,6 +200,26 @@ export function permitValid(p: Permit, now = new Date()) {
     clock.time <= p.until
   );
 }
+// O estado do comunicado vem das datas, não de um campo editável.
+export function noticeState(n: Notice, now = new Date()): NoticeState {
+  if (n.finished) return "finalizado";
+  const clock = localClock(now);
+  const stamp = `${clock.date} ${clock.time}`;
+  if (stamp < `${n.start} ${n.startTime}`) return "agendado";
+  if (n.end && stamp > `${n.end} ${n.endTime}`) return "finalizado";
+  return "ativo";
+}
+// Condôminos que receberiam o comunicado, segundo o destino escolhido.
+export function recipients(data: Data, n: Pick<Notice, "audience" | "unitId" | "tenants">) {
+  return data.residents.filter((r) => {
+    const unit = data.units.find((u) => u.id === r.unitId);
+    if (!r.active || !unit?.active) return false;
+    if (n.audience === "proprietarios" && !r.owner) return false;
+    if (n.audience === "unidade" && r.unitId !== n.unitId) return false;
+    if (!n.tenants && unit.rented && !r.owner) return false;
+    return true;
+  });
+}
 export function matchingPermit(
   data: Data,
   visit: Pick<Visit, "document" | "residentId">,
@@ -134,11 +237,7 @@ function responsible(data: Data, id: string) {
   if (!r?.active || !data.units.some((u) => u.id === r.unitId && u.active))
     throw new Error("Selecione um condômino ativo de uma residência ativa.");
 }
-export function validate(
-  data: Data,
-  collection: Collection,
-  item: Unit | Resident | Permit | Visit
-) {
+export function validate(data: Data, collection: Collection, item: Entity) {
   if (collection === "units") {
     const u = item as Unit;
     if (!u.block.trim() || !u.number.trim())
@@ -201,7 +300,7 @@ export function validate(
     if (!p.days.length || p.days.some((d) => !Number.isInteger(d) || d < 0 || d > 6))
       throw new Error("Selecione ao menos um dia da semana válido.");
     if (!p.reason.trim()) throw new Error("Informe a justificativa da pré-autorização.");
-  } else {
+  } else if (collection === "visits") {
     const v = item as Visit;
     responsible(data, v.residentId);
     if (!v.name.trim() || !identity(v.document) || !v.purpose.trim())
@@ -215,6 +314,44 @@ export function validate(
       )
     )
       throw new Error("Este visitante já possui uma visita em andamento.");
+  } else if (collection === "mail") {
+    const m = item as Mail;
+    responsible(data, m.residentId);
+    if (!m.description.trim()) throw new Error("Descreva a correspondência recebida.");
+    if (!m.receivedBy.trim()) throw new Error("Informe quem recebeu a correspondência.");
+    if (
+      identity(m.tracking) &&
+      data.mail.some(
+        (x) =>
+          x.id !== m.id && x.status !== "retirada" && identity(x.tracking) === identity(m.tracking)
+      )
+    )
+      throw new Error("Já existe uma correspondência aguardando retirada com esse rastreio.");
+  } else if (collection === "issues") {
+    const i = item as Issue;
+    if (!i.description.trim() || !i.kind.trim())
+      throw new Error("Preencha o tipo e a descrição da ocorrência.");
+    if (!i.reporter.trim()) throw new Error("Informe quem registrou a ocorrência.");
+    if (i.residentId) responsible(data, i.residentId);
+    if (i.pinned && i.status === "encerrada")
+      throw new Error("Uma ocorrência encerrada não pode ficar fixada.");
+  } else {
+    const n = item as Notice;
+    if (!n.subject.trim() || !n.body.trim()) throw new Error("Preencha o assunto e o texto.");
+    if (n.audience === "unidade" && !data.units.some((u) => u.id === n.unitId && u.active))
+      throw new Error("Selecione uma residência ativa como destino.");
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(n.start) || !/^([01]\d|2[0-3]):[0-5]\d$/.test(n.startTime))
+      throw new Error("Informe uma data e um horário de disparo válidos.");
+    if (n.end || n.endTime) {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(n.end) || !/^([01]\d|2[0-3]):[0-5]\d$/.test(n.endTime))
+        throw new Error(
+          "Informe uma data e um horário de finalização válidos, ou deixe ambos em branco."
+        );
+      if (`${n.end} ${n.endTime}` <= `${n.start} ${n.startTime}`)
+        throw new Error("A finalização deve ser posterior ao disparo.");
+    }
+    if (!recipients(data, n).length)
+      throw new Error("Nenhum condômino ativo corresponde a esse destino.");
   }
 }
 export function transition(
@@ -274,9 +411,82 @@ export function transition(
   if (action === "finish") next.exitAt = now.toISOString();
   return next;
 }
+export function mailTransition(
+  data: Data,
+  id: string,
+  action: "notify" | "pickup",
+  text = "",
+  now = new Date()
+): Mail {
+  const m = data.mail.find((x) => x.id === id);
+  if (!m) throw new Error("Correspondência não encontrada.");
+  const allowed = { notify: ["recebida"], pickup: ["recebida", "avisada"] };
+  if (!allowed[action].includes(m.status))
+    throw new Error("Esta ação não é válida para a situação atual da correspondência.");
+  responsible(data, m.residentId);
+  const next = { ...m };
+  if (action === "notify") {
+    next.status = "avisada";
+    next.noticedAt = now.toISOString();
+  } else {
+    if (!text.trim()) throw new Error("Informe quem retirou a correspondência.");
+    next.status = "retirada";
+    next.pickupAt = now.toISOString();
+    next.pickedBy = text.trim();
+  }
+  return next;
+}
+export function issueTransition(
+  data: Data,
+  id: string,
+  action: "reply" | "close" | "pin" | "unpin",
+  text = "",
+  now = new Date(),
+  author = "operador"
+): Issue {
+  const i = data.issues.find((x) => x.id === id);
+  if (!i) throw new Error("Ocorrência não encontrada.");
+  if (i.status === "encerrada") throw new Error("Esta ocorrência já foi encerrada.");
+  const next = { ...i, replies: [...i.replies] };
+  const note = (message: string) =>
+    next.replies.push({ id: crypto.randomUUID(), at: now.toISOString(), author, text: message });
+  if (action === "reply") {
+    if (!text.trim()) throw new Error("Escreva a resposta da ocorrência.");
+    note(text.trim());
+  } else if (action === "close") {
+    if (!text.trim()) throw new Error("Informe como a ocorrência foi resolvida.");
+    note(text.trim());
+    next.status = "encerrada";
+    next.closedAt = now.toISOString();
+    next.pinned = false;
+  } else {
+    next.pinned = action === "pin";
+  }
+  return next;
+}
+export function noticeTransition(
+  data: Data,
+  id: string,
+  action: "finish" | "reopen",
+  _text = "",
+  now = new Date()
+): Notice {
+  const n = data.notices.find((x) => x.id === id);
+  if (!n) throw new Error("Comunicado não encontrado.");
+  if (action === "finish") {
+    if (noticeState(n, now) === "finalizado")
+      throw new Error("Este comunicado já está finalizado.");
+    return { ...n, finished: true };
+  }
+  if (!n.finished) throw new Error("Só é possível reabrir um comunicado finalizado manualmente.");
+  const reopened = { ...n, finished: false };
+  if (noticeState(reopened, now) === "finalizado")
+    throw new Error("A data de finalização já passou. Ajuste o período antes de reabrir.");
+  return reopened;
+}
 export function seed(): Data {
   return {
-    version: 1,
+    version: 2,
     revision: 0,
     units: [
       {
@@ -336,6 +546,9 @@ export function seed(): Data {
     ],
     visits: [],
     permits: [],
+    mail: [],
+    issues: [],
+    notices: [],
     logs: [],
   };
 }
@@ -343,7 +556,7 @@ export function seed(): Data {
 export function isData(value: unknown): value is Data {
   if (!value || typeof value !== "object") return false;
   const d = value as Data;
-  if (d.version !== 1 || !Number.isSafeInteger(d.revision) || d.revision < 0) return false;
+  if (d.version !== 2 || !Number.isSafeInteger(d.revision) || d.revision < 0) return false;
   const shapes: Record<string, Record<string, string>> = {
     units: {
       id: "string",
@@ -402,6 +615,53 @@ export function isData(value: unknown): value is Data {
       exitAt: "string",
       permitId: "string",
     },
+    mail: {
+      id: "string",
+      residentId: "string",
+      description: "string",
+      tracking: "string",
+      carrier: "string",
+      receivedBy: "string",
+      attachment: "string",
+      notes: "string",
+      status: "string",
+      createdAt: "string",
+      noticedAt: "string",
+      pickupAt: "string",
+      pickedBy: "string",
+    },
+    issues: {
+      id: "string",
+      kind: "string",
+      description: "string",
+      place: "string",
+      residentId: "string",
+      reporter: "string",
+      shared: "boolean",
+      pinned: "boolean",
+      notify: "boolean",
+      attachment: "string",
+      status: "string",
+      createdAt: "string",
+      closedAt: "string",
+    },
+    notices: {
+      id: "string",
+      subject: "string",
+      body: "string",
+      audience: "string",
+      unitId: "string",
+      attachment: "string",
+      start: "string",
+      startTime: "string",
+      end: "string",
+      endTime: "string",
+      email: "boolean",
+      push: "boolean",
+      tenants: "boolean",
+      finished: "boolean",
+      createdAt: "string",
+    },
     logs: { id: "string", entityId: "string", at: "string", actor: "string", message: "string" },
   };
   for (const [key, shape] of Object.entries(shapes)) {
@@ -422,7 +682,36 @@ export function isData(value: unknown): value is Data {
         p.days.every((day) => Number.isInteger(day) && day >= 0 && day <= 6)
     ) &&
     d.visits.every((v) => Object.prototype.hasOwnProperty.call(statusLabels, v.status)) &&
+    d.mail.every((m) => Object.prototype.hasOwnProperty.call(mailLabels, m.status)) &&
+    d.issues.every(
+      (i) =>
+        Object.prototype.hasOwnProperty.call(issueLabels, i.status) &&
+        Array.isArray(i.replies) &&
+        i.replies.every(
+          (r) =>
+            r &&
+            typeof r.id === "string" &&
+            typeof r.at === "string" &&
+            typeof r.author === "string" &&
+            typeof r.text === "string"
+        )
+    ) &&
+    d.notices.every((n) => Object.prototype.hasOwnProperty.call(audienceLabels, n.audience)) &&
     d.residents.every((r) => d.units.some((u) => u.id === r.unitId)) &&
-    [...d.visits, ...d.permits].every((x) => d.residents.some((r) => r.id === x.residentId))
+    [...d.visits, ...d.permits, ...d.mail].every((x) =>
+      d.residents.some((r) => r.id === x.residentId)
+    ) &&
+    d.issues.every((i) => !i.residentId || d.residents.some((r) => r.id === i.residentId)) &&
+    d.notices.every((n) => n.audience !== "unidade" || d.units.some((u) => u.id === n.unitId))
   );
+}
+// Lê o formato gravado antes do bloco 2 sem descartar os cadastros existentes.
+export function migrate(value: unknown): Data | null {
+  if (!value || typeof value !== "object") return null;
+  const raw = value as Record<string, unknown>;
+  if (raw.version === 1) {
+    const upgraded = { ...raw, version: 2, mail: [], issues: [], notices: [] };
+    return isData(upgraded) ? upgraded : null;
+  }
+  return isData(value) ? value : null;
 }

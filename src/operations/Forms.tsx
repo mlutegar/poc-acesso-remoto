@@ -3,14 +3,14 @@ import { useOperations } from "./Store";
 import {
   localClock,
   unitName,
-  type Collection,
+  type CoreCollection,
   type Unit,
   type Resident,
   type Permit,
   type Visit,
 } from "./model";
 import { Check, Field, Modal } from "./UI";
-export type Edit = { kind: Collection; item?: Unit | Resident | Permit | Visit };
+export type Edit = { kind: CoreCollection; item?: Unit | Resident | Permit | Visit };
 const titles = {
   units: "residência",
   residents: "condômino",

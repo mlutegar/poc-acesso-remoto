@@ -8,7 +8,7 @@ import {
   permitValid,
   statusLabels,
   unitName,
-  type Collection,
+  type CoreCollection,
   type Permit,
   type Resident,
   type Unit,
@@ -29,7 +29,7 @@ const createLabels = {
   permits: "Nova pré-autorização",
 };
 type Action = { visit: Visit; kind: "authorize" | "permit" | "enter" | "deny" | "finish" };
-export default function Operations({ kind }: { kind: Collection }) {
+export default function Operations({ kind }: { kind: CoreCollection }) {
   const { data, error: storageError, act } = useOperations();
   const [, refreshClock] = useState(0);
   useEffect(() => {

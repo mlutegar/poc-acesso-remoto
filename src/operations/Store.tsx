@@ -1,25 +1,25 @@
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { useAuth } from "../auth/AuthProvider";
 import {
-  isData,
+  issueTransition,
+  mailTransition,
+  migrate,
+  noticeTransition,
   seed,
   transition,
   validate,
   type Collection,
   type Data,
-  type Permit,
-  type Resident,
-  type Unit,
-  type Visit,
+  type Entity,
 } from "./model";
 
 const KEY = "portaris-operations-v1";
-type Item = Unit | Resident | Permit | Visit;
+type Item = Entity;
 function read(): Data {
   const raw = localStorage.getItem(KEY);
   if (!raw) return seed();
-  const value: unknown = JSON.parse(raw);
-  if (!isData(value)) throw new Error("Formato de dados locais inválido.");
+  const value = migrate(JSON.parse(raw) as unknown);
+  if (!value) throw new Error("Formato de dados locais inválido.");
   return value;
 }
 interface Context {
@@ -27,6 +27,9 @@ interface Context {
   error: string;
   save: (collection: Collection, item: Item) => void;
   act: (id: string, action: Parameters<typeof transition>[2], reason: string) => void;
+  actMail: (id: string, action: Parameters<typeof mailTransition>[2], text: string) => void;
+  actIssue: (id: string, action: Parameters<typeof issueTransition>[2], text: string) => void;
+  actNotice: (id: string, action: Parameters<typeof noticeTransition>[2]) => void;
 }
 const Ctx = createContext<Context | null>(null);
 export function OperationsProvider({ children }: { children: ReactNode }) {
@@ -110,6 +113,23 @@ export function OperationsProvider({ children }: { children: ReactNode }) {
       `${existed ? "Cadastro atualizado" : "Cadastro criado"}${"active" in item ? (item.active ? " · ativo" : " · inativo") : ""}`
     );
   }
+  // Aplica a transição da entidade e registra a mesma linha de histórico dos cadastros.
+  function change(
+    collection: "visits" | "mail" | "issues" | "notices",
+    id: string,
+    next: (base: Data) => Item,
+    label: string,
+    detail: string
+  ) {
+    commit(
+      (base) => ({
+        ...base,
+        [collection]: (base[collection] as Item[]).map((x) => (x.id === id ? next(base) : x)),
+      }),
+      id,
+      `${label}${detail.trim() ? ` · ${detail.trim()}` : ""}`
+    );
+  }
   function act(id: string, action: Parameters<typeof transition>[2], reason: string) {
     const labels = {
       authorize: "Autorização confirmada pelo operador",
@@ -118,16 +138,39 @@ export function OperationsProvider({ children }: { children: ReactNode }) {
       deny: "Acesso negado",
       finish: "Saída registrada",
     };
-    commit(
-      (base) => ({
-        ...base,
-        visits: base.visits.map((v) => (v.id === id ? transition(base, id, action, reason) : v)),
-      }),
+    change("visits", id, (base) => transition(base, id, action, reason), labels[action], reason);
+  }
+  function actMail(id: string, action: Parameters<typeof mailTransition>[2], text: string) {
+    const labels = {
+      notify: "Destinatário avisado (demonstração)",
+      pickup: "Retirada registrada",
+    };
+    change("mail", id, (base) => mailTransition(base, id, action, text), labels[action], text);
+  }
+  function actIssue(id: string, action: Parameters<typeof issueTransition>[2], text: string) {
+    const labels = {
+      reply: "Resposta registrada",
+      close: "Ocorrência encerrada",
+      pin: "Ocorrência fixada",
+      unpin: "Ocorrência desafixada",
+    };
+    change(
+      "issues",
       id,
-      `${labels[action]}${reason.trim() ? ` · ${reason.trim()}` : ""}`
+      (base) => issueTransition(base, id, action, text, new Date(), user || "operador"),
+      labels[action],
+      text
     );
   }
-  return <Ctx.Provider value={{ data, error, save, act }}>{children}</Ctx.Provider>;
+  function actNotice(id: string, action: Parameters<typeof noticeTransition>[2]) {
+    const labels = { finish: "Comunicado finalizado", reopen: "Comunicado reaberto" };
+    change("notices", id, (base) => noticeTransition(base, id, action), labels[action], "");
+  }
+  return (
+    <Ctx.Provider value={{ data, error, save, act, actMail, actIssue, actNotice }}>
+      {children}
+    </Ctx.Provider>
+  );
 }
 export function useOperations() {
   const value = useContext(Ctx);

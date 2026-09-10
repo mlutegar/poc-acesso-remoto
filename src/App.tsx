@@ -5,6 +5,9 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Eventos from "./pages/Eventos";
 import Operations from "./operations/Operations";
+import MailPage from "./operations/Mail";
+import Issues from "./operations/Issues";
+import Notices from "./operations/Notices";
 import Veiculos from "./pages/Veiculos";
 import Dispositivos from "./pages/Dispositivos";
 
@@ -24,6 +27,9 @@ export default function App() {
         <Route path="/condominos" element={<Operations key="residents" kind="residents" />} />
         <Route path="/residencias" element={<Operations key="units" kind="units" />} />
         <Route path="/pre-autorizacoes" element={<Operations key="permits" kind="permits" />} />
+        <Route path="/correspondencias" element={<MailPage />} />
+        <Route path="/ocorrencias" element={<Issues />} />
+        <Route path="/comunicados" element={<Notices />} />
         <Route path="/operacao" element={<Dashboard />} />
         <Route path="/eventos" element={<Eventos />} />
         <Route path="/pessoas" element={<Navigate to="/condominos" replace />} />

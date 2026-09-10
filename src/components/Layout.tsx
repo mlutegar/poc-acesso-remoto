@@ -39,9 +39,12 @@ export default function Layout() {
         <nav className="op-nav" aria-label="Menu principal">
           {[
             ["/visitas", "Visitas"],
+            ["/correspondencias", "Correspondências"],
             ["/condominos", "Condôminos"],
             ["/residencias", "Residências"],
             ["/pre-autorizacoes", "Pré-autorizações"],
+            ["/ocorrencias", "Ocorrências"],
+            ["/comunicados", "Comunicados"],
           ].map(([to, text]) => (
             <NavLink key={to} to={to}>
               {text}
