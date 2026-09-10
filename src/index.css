@@ -1,0 +1,30 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Tokens padrão (tema Portaris). Canais RGB "R G B" para permitir opacidade. */
+:root {
+  --c-navy: 11 31 58;
+  --c-blue: 20 110 245;
+  --c-bg: 244 247 250;
+  --c-card: 255 255 255;
+  --c-success: 22 163 74;
+  --c-danger: 220 38 38;
+  --c-warning: 245 158 11;
+  --c-ink: 23 32 51;
+}
+
+/* Dark mode: mantém navy/status; ajusta fundo, card e texto. */
+[data-mode="dark"] {
+  --c-bg: 8 15 26;
+  --c-card: 15 26 43;
+  --c-ink: 226 232 242;
+}
+
+html, body, #root {
+  height: 100%;
+}
+body {
+  @apply bg-bg text-ink font-sans antialiased;
+}

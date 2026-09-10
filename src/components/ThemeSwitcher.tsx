@@ -1,0 +1,31 @@
+import { useTheme } from "../theme/ThemeProvider";
+
+/** Prova o conceito white-label: troca marca + paleta em runtime. */
+export default function ThemeSwitcher() {
+  const { preset, setPreset, presets, mode, toggleMode } = useTheme();
+
+  return (
+    <div className="flex items-center gap-2">
+      <label className="sr-only" htmlFor="brand-select">Marca</label>
+      <select
+        id="brand-select"
+        value={preset.id}
+        onChange={(e) => setPreset(e.target.value)}
+        className="rounded-lg border border-ink/15 bg-card px-2.5 py-1.5 text-xs font-medium text-ink outline-none focus:border-blue"
+        title="Trocar marca (white-label)"
+      >
+        {presets.map((p) => (
+          <option key={p.id} value={p.id}>{p.name}</option>
+        ))}
+      </select>
+      <button
+        onClick={toggleMode}
+        aria-label={mode === "light" ? "Ativar modo escuro" : "Ativar modo claro"}
+        title={mode === "light" ? "Modo escuro" : "Modo claro"}
+        className="flex h-8 w-8 items-center justify-center rounded-lg border border-ink/15 bg-card text-sm text-ink hover:border-blue"
+      >
+        {mode === "light" ? "🌙" : "☀️"}
+      </button>
+    </div>
+  );
+}
