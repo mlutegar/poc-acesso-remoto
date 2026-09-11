@@ -99,3 +99,22 @@ As três telas ficaram em `src/operations/Mail.tsx`, `Issues.tsx` e `Notices.tsx
 - As listagens do original mostram foto do visitante/morador e uma linha com criação/atualização por registro; aqui não há fotos e o histórico fica em janela.
 - As páginas de exemplo anteriores (painel, eventos, veículos, dispositivos) mantêm a aparência antiga de cartões; o painel operacional do próprio original também usa cartões modernos, então a diferença é aceitável para a demonstração.
 - Capturas do sistema de referência ficaram fora do repositório por conterem dados de moradores.
+
+# Conjunto de demonstração — 11/09/2026
+
+## Entregue
+
+- `src/operations/demo.ts`: um condomínio fictício com movimento de um dia comum de portaria — 12 residências (uma inativa, em reforma), 21 condôminos (um inativo, no histórico), 16 visitas cobrindo as cinco situações, 6 pré-autorizações (uma vencida), 12 correspondências nas três situações, 7 ocorrências (duas fixadas, duas encerradas, algumas com conversa) e 6 comunicados nos três estados.
+- As datas são calculadas a cada carga, relativas a agora, para as listas nunca parecerem antigas numa apresentação.
+- O navegador sem dados gravados passa a abrir com esse conjunto, em vez das duas residências de exemplo.
+- No menu do usuário, "Recarregar demonstração" restaura tudo em dois cliques — para reiniciar a apresentação depois de mexerem nos dados. O segundo clique avisa que apaga o que foi cadastrado. São dois botões em vez de um `confirm()` do navegador, que travaria a janela.
+
+## Origem dos dados
+
+Nada foi copiado do sistema de referência. Nomes, endereços, telefones, placas e textos são inventados. Os documentos têm formato de CPF com dígitos verificadores propositalmente inválidos, de modo que não correspondem ao documento de nenhuma pessoa — há teste automatizado verificando isso.
+
+## Verificação
+
+- `npm test`: 22 testes (4 novos). Os novos conferem que o conjunto passa pelo `isData`, que cada cadastro passa pela mesma `validate` usada ao salvar pela interface, que as regras de negócio são respeitadas (documento único, um principal por residência, nenhuma visita aberta repetida, responsáveis ativos) e que todas as situações de cada módulo aparecem.
+- `npm run build` e `npx eslint` sem erros.
+- Conferido no navegador: as seis telas com os dados, o botão de recarregar gravando as 12+21+16+12+7+6 linhas, e uma gravação normal em cima dos dados de demonstração (aviso de correspondência) subindo a revisão e o histórico.

@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthProvider";
 import { useTheme } from "../theme/ThemeProvider";
+import { useOperations } from "../operations/Store";
 import ThemeSwitcher from "./ThemeSwitcher";
 import BrandMark from "./BrandMark";
 import { Icon } from "./Icons";
@@ -91,7 +93,10 @@ function Items({ items }: { items: MenuItem[] }) {
 export default function Layout() {
   const { user, logout } = useAuth();
   const { preset } = useTheme();
+  const { reset } = useOperations();
   const navigate = useNavigate();
+  // Dois cliques em vez de um diálogo do navegador, que travaria a janela.
+  const [confirming, setConfirming] = useState(false);
   return (
     <div className="op-shell">
       <header className="sh-top">
@@ -139,6 +144,29 @@ export default function Layout() {
                   >
                     <Icon name="exit" /> Sair
                   </button>
+                </div>
+                <div className="sh-user-actions">
+                  {confirming ? (
+                    <>
+                      <span className="text-[11px] text-danger">Apaga o que foi cadastrado.</span>
+                      <button
+                        className="op-button"
+                        onClick={() => {
+                          reset();
+                          setConfirming(false);
+                        }}
+                      >
+                        <Icon name="check" /> Confirmar
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <span className="text-[11px] text-ink/50">Condomínio fictício</span>
+                      <button className="op-button" onClick={() => setConfirming(true)}>
+                        Recarregar demonstração
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
             </details>

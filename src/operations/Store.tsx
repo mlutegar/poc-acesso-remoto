@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { useAuth } from "../auth/AuthProvider";
+import { demoData } from "./demo";
 import {
   issueTransition,
   mailTransition,
@@ -17,7 +18,7 @@ const KEY = "portaris-operations-v1";
 type Item = Entity;
 function read(): Data {
   const raw = localStorage.getItem(KEY);
-  if (!raw) return seed();
+  if (!raw) return demoData();
   const value = migrate(JSON.parse(raw) as unknown);
   if (!value) throw new Error("Formato de dados locais inválido.");
   return value;
@@ -30,6 +31,7 @@ interface Context {
   actMail: (id: string, action: Parameters<typeof mailTransition>[2], text: string) => void;
   actIssue: (id: string, action: Parameters<typeof issueTransition>[2], text: string) => void;
   actNotice: (id: string, action: Parameters<typeof noticeTransition>[2]) => void;
+  reset: () => void;
 }
 const Ctx = createContext<Context | null>(null);
 export function OperationsProvider({ children }: { children: ReactNode }) {
@@ -166,8 +168,31 @@ export function OperationsProvider({ children }: { children: ReactNode }) {
     const labels = { finish: "Comunicado finalizado", reopen: "Comunicado reaberto" };
     change("notices", id, (base) => noticeTransition(base, id, action), labels[action], "");
   }
+  // Recarrega o condomínio de demonstração, descartando o que estiver gravado.
+  function reset() {
+    const next = demoData();
+    next.logs = [
+      {
+        id: crypto.randomUUID(),
+        entityId: "",
+        actor: user || "operador",
+        at: new Date().toISOString(),
+        message: "Dados de demonstração recarregados",
+      },
+      ...next.logs,
+    ];
+    try {
+      localStorage.setItem(KEY, JSON.stringify(next));
+    } catch {
+      setError("Não foi possível gravar os dados de demonstração neste navegador.");
+      return;
+    }
+    current.current = next;
+    setData(next);
+    setError("");
+  }
   return (
-    <Ctx.Provider value={{ data, error, save, act, actMail, actIssue, actNotice }}>
+    <Ctx.Provider value={{ data, error, save, act, actMail, actIssue, actNotice, reset }}>
       {children}
     </Ctx.Provider>
   );
