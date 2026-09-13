@@ -175,6 +175,7 @@ Não é só "ligar o aparelho". Precisa de: o modelo instalado em cada ponto de 
 - Barra de marca clara com a logo, menu escuro na cor da marca, ambos alinhados à mesma coluna de 960px do conteúdo. Menu plano com o item ativo sublinhado. Fonte IBM Plex Sans. Títulos, botões, abas, cabeçalhos de tabela e selos em caixa normal; caixa alta só no menu. Selos em contorno, botões sem gradiente, cantos de 2px.
 - A logo virou PNG com **fundo transparente** (preenchimento a partir das bordas, sem tocar no desenho; o JPEG original tinha fundo `#f9f9f9` com ruído entre `#f8` e `#f9`, que deixava um retângulo visível sobre o branco). A barra de marca usa exatamente `#f9f9f9` (`--c-brandbar`) por segurança; no modo escuro a barra e a placa da logo ficam escuras.
 - Como só há uma marca, o seletor de marca some do login e do menu do usuário; fica o alternador claro/escuro.
+- Duas versões da logo: `logo-atrio.png` completa, com o slogan, usada grande no login (124px), e `logo-atrio-marca.png` só com o "A" e o nome, usada no cabeçalho (48px numa barra de 72px). No cabeçalho o slogan é **texto tipografado** ao lado da marca, na cor azul-aço do "A": dentro da imagem, a 48px, ele teria 4px de altura e seria ilegível. A barra do login mostra só o condomínio, para não repetir a marca.
 
 ## O que não mudou
 

@@ -1,13 +1,23 @@
 import { useTheme } from "../theme/ThemeProvider";
 
-/** Logo do produto. Usa a imagem de public/ quando existir; senão, o monograma. */
-export default function BrandMark({ size = 36 }: { size?: number }) {
+/**
+ * Logo do produto. "mark" é a marca sem o slogan, para o cabeçalho; "full" é a
+ * logo completa, para o login. Sem imagem configurada, cai no monograma.
+ */
+export default function BrandMark({
+  size = 40,
+  variant = "mark",
+}: {
+  size?: number;
+  variant?: "mark" | "full";
+}) {
   const { preset } = useTheme();
-  if (preset.logo) {
+  const src = variant === "full" ? preset.logo : preset.logoMark || preset.logo;
+  if (src) {
     return (
       <img
         className="sh-logo"
-        src={preset.logo}
+        src={src}
         alt={`Logo ${preset.name}`}
         style={{ height: size, width: "auto" }}
       />

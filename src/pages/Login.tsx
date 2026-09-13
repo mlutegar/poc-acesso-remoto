@@ -1,5 +1,4 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { useTheme } from "../theme/ThemeProvider";
 import { useAuth } from "../auth/AuthProvider";
 import BrandMark from "../components/BrandMark";
 import ThemeSwitcher from "../components/ThemeSwitcher";
@@ -7,7 +6,6 @@ import ThemeSwitcher from "../components/ThemeSwitcher";
 export default function Login() {
   const navigate = useNavigate();
   const location = useLocation() as { state?: { from?: { pathname?: string } } };
-  const { preset } = useTheme();
   const { login } = useAuth();
 
   const submit = (e: React.FormEvent) => {
@@ -20,19 +18,13 @@ export default function Login() {
     <div className="sh-login">
       <div className="sh-login-top">
         <div className="sh-top-inner">
-          <div className="sh-brand">
-            <BrandMark size={40} />
-            {!preset.logo && (
-              <div>
-                <strong>{preset.name}</strong>
-                <small>Controle de acesso</small>
-              </div>
-            )}
-          </div>
-          <span className="sh-phone">Condomínio Modelo · (61) 3000-0000</span>
+          <span className="sh-phone solo">Condomínio Modelo · (61) 3000-0000</span>
         </div>
       </div>
       <form className="sh-login-box" onSubmit={submit}>
+        <div className="sh-login-logo">
+          <BrandMark variant="full" size={124} />
+        </div>
         <h1>Acesso ao sistema</h1>
         <label htmlFor="user">Usuário</label>
         <input id="user" defaultValue="operador" autoComplete="username" />

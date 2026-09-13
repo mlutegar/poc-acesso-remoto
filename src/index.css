@@ -54,10 +54,10 @@ body {
   background: rgb(var(--c-brandbar));
 }
 .sh-top-inner {
-  @apply mx-auto flex h-16 w-full max-w-[960px] items-center gap-5 px-2.5;
+  @apply mx-auto flex h-[72px] w-full max-w-[960px] items-center gap-5 px-2.5;
 }
 .sh-brand {
-  @apply flex items-center gap-3;
+  @apply flex items-center gap-4;
 }
 .sh-brand strong {
   @apply block text-[16px] font-semibold leading-tight tracking-[-0.01em];
@@ -67,6 +67,9 @@ body {
 }
 .sh-condo {
   @apply hidden;
+}
+.sh-phone.solo {
+  @apply border-0 pl-0;
 }
 .sh-phone {
   @apply border-l border-line pl-5 text-[13px] text-ink/70;
@@ -112,7 +115,16 @@ body {
 /* A logo tem fundo transparente; a placa usa a cor da barra, e no modo escuro fica escura também. */
 .sh-logo {
   @apply block rounded-[2px];
-  background: rgb(var(--c-brandbar));
+}
+
+[data-mode="dark"] .sh-logo {
+  background: rgb(249 249 249);
+  padding: 4px 6px;
+}
+
+/* Slogan tipografado ao lado da marca, na cor do "A" da logo. */
+.sh-slogan {
+  @apply hidden text-[12px] font-medium tracking-[.06em] text-blue sm:block;
 }
 
 /* Barra de menu. */
@@ -431,13 +443,16 @@ body {
   @apply mx-auto mt-16 w-full max-w-sm border border-line bg-card p-8;
 }
 .sh-login-box h1 {
-  @apply mb-6 text-[20px] font-semibold;
+  @apply mb-5 text-center text-[18px] font-semibold;
 }
 .sh-login-box label {
   @apply mb-1 block text-[13px] font-bold;
 }
 .sh-login-box input {
   @apply mb-4 block h-8 w-full rounded-[2px] border border-line bg-card px-2 text-[13px];
+}
+.sh-login-logo {
+  @apply mb-6 flex justify-center border-b border-line pb-6;
 }
 .sh-login-foot {
   @apply mt-6 flex items-center justify-between text-[11px] text-ink/50;

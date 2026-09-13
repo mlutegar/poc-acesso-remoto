@@ -6,8 +6,10 @@ export interface ThemePreset {
   name: string;
   tagline: string;
   initials: string;
-  /** Caminho da logo em public/, quando houver. Sem ela, usa o monograma. */
+  /** Logo completa (com slogan), para o login. Sem ela, usa o monograma. */
   logo: string;
+  /** Só a marca e o nome, sem o slogan, para o cabeçalho. */
+  logoMark: string;
   // canais RGB "R G B"
   navy: string;
   blue: string;
@@ -20,6 +22,7 @@ export const presets: ThemePreset[] = [
     tagline: "Seu condomínio sob controle",
     initials: "A",
     logo: "/logo-atrio.png",
+    logoMark: "/logo-atrio-marca.png",
     // medidas na própria logo: #182838 no nome, #405870 no "A"
     navy: "24 40 56",
     blue: "64 88 112",

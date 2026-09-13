@@ -108,8 +108,10 @@ export default function Layout() {
       <header className="sh-top">
         <div className="sh-top-inner">
           <NavLink to="/visitas" className="sh-brand">
-            <BrandMark size={40} />
-            {!preset.logo && (
+            <BrandMark size={48} />
+            {preset.logo ? (
+              <span className="sh-slogan">{preset.tagline.toLowerCase()}</span>
+            ) : (
               <div>
                 <strong>{preset.name}</strong>
                 <small>Controle de acesso</small>
