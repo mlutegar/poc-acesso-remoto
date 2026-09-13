@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Tokens padrão (tema Portaris). Canais RGB "R G B" para permitir opacidade.
+/* Tokens padrão (tema Átrio). Canais RGB "R G B" para permitir opacidade.
    A estrutura visual segue o padrão observado no sistema de referência:
    fundo cinza-claro, cabeçalho e menu em azul-escuro, títulos em caixa alta,
    listagens compactas em tabela zebrada. */
@@ -51,22 +51,22 @@ body {
   @apply bg-navy text-white;
 }
 .sh-top-inner {
-  @apply flex h-[70px] items-center gap-5 px-6;
+  @apply mx-auto flex h-16 w-full max-w-[960px] items-center gap-5 px-2.5;
 }
 .sh-brand {
   @apply flex items-center gap-3;
 }
 .sh-brand strong {
-  @apply block text-[15px] font-bold leading-tight;
+  @apply block text-[16px] font-semibold leading-tight tracking-[-0.01em];
 }
 .sh-brand small {
-  @apply block text-[9px] font-bold uppercase tracking-[.14em] text-white/60;
+  @apply block text-[10px] font-medium uppercase tracking-[.12em] text-white/55;
 }
 .sh-condo {
-  @apply ml-2 flex h-[46px] w-[46px] items-center justify-center rounded-full border-2 border-white/70 text-[10px] font-bold uppercase tracking-wider;
+  @apply hidden;
 }
 .sh-phone {
-  @apply text-[15px] font-bold;
+  @apply border-l border-white/20 pl-5 text-[13px] text-white/80;
 }
 .sh-tools {
   @apply ml-auto flex items-center gap-4;
@@ -79,13 +79,13 @@ body {
   @apply h-[18px] w-[18px];
 }
 .sh-condo-name {
-  @apply text-[15px] font-bold lowercase;
+  @apply text-[13px] font-medium text-white/85;
 }
 .sh-user {
   @apply relative;
 }
 .sh-user > summary {
-  @apply flex h-8 cursor-pointer list-none items-center gap-1.5 rounded border border-white/70 bg-white/10 px-2 text-[9px] font-bold uppercase hover:bg-white/20;
+  @apply flex h-8 cursor-pointer list-none items-center gap-2 rounded-[2px] border border-white/25 px-2.5 text-[12px] font-medium hover:bg-white/10;
 }
 .sh-user > summary::-webkit-details-marker {
   display: none;
@@ -108,36 +108,36 @@ body {
 
 /* Barra de menu: fica encostada à esquerda e termina em canto arredondado. */
 .sh-nav {
-  @apply relative z-20;
+  @apply relative z-20 border-t border-white/10 bg-navy;
 }
 .sh-nav > ul {
-  @apply inline-flex items-stretch rounded-br-[20px] bg-navy pr-3;
+  @apply mx-auto flex w-full max-w-[960px] items-stretch px-2.5;
 }
 .sh-nav li {
   @apply relative;
 }
 .sh-nav a,
 .sh-nav summary {
-  @apply block cursor-pointer list-none whitespace-nowrap px-5 py-2.5 text-[14px] font-bold uppercase text-white hover:text-sky-300;
+  @apply block cursor-pointer list-none whitespace-nowrap border-b-[3px] border-transparent px-4 py-2.5 text-[12.5px] font-semibold uppercase tracking-[.04em] text-white/75 hover:text-white;
 }
 .sh-nav a.active {
-  @apply text-sky-300;
+  @apply border-white text-white;
 }
 .sh-nav summary::-webkit-details-marker {
   display: none;
 }
 .sh-sub {
-  @apply absolute left-0 top-full z-30 hidden min-w-[210px] rounded-b-[20px] bg-navy pb-3 pt-1 shadow-lg;
+  @apply absolute left-0 top-full z-30 hidden min-w-[220px] border border-white/10 bg-navy py-1 shadow-lg;
 }
 .sh-nav li:hover > .sh-sub,
 .sh-nav li:focus-within > .sh-sub {
   @apply block;
 }
 .sh-sub a {
-  @apply px-5 py-2 text-[13px];
+  @apply border-0 px-4 py-2 text-[12.5px] normal-case tracking-normal;
 }
 .sh-sub > li > .sh-sub {
-  @apply left-full top-0 rounded-bl-none;
+  @apply left-full top-0;
 }
 .sh-sub .sh-group > a::after {
   content: "›";
@@ -146,16 +146,16 @@ body {
 
 /* ---------- Página ---------- */
 .op-main {
-  @apply mx-auto w-full max-w-[960px] px-2.5 pb-16 pt-12;
+  @apply mx-auto w-full max-w-[960px] px-2.5 pb-16 pt-9;
 }
 .op-breadcrumb {
   @apply hidden;
 }
 .op-page-heading {
-  @apply mb-1 flex items-start justify-between gap-4;
+  @apply mb-3 flex items-center justify-between gap-4;
 }
 .op-page-heading h1 {
-  @apply text-[28px] font-bold uppercase leading-10;
+  @apply text-[22px] font-semibold leading-8 tracking-[-0.01em];
 }
 .op-page-heading p {
   @apply hidden;
@@ -187,15 +187,13 @@ body {
 
 /* Botões: principal em azul-escuro, os demais como botões pequenos cinza. */
 .op-button {
-  @apply inline-flex h-[20px] items-center justify-center gap-1 whitespace-nowrap rounded-[3px] border border-line bg-card px-1.5 text-[12px] uppercase leading-none text-ink hover:bg-head disabled:cursor-not-allowed disabled:opacity-40;
-  background-image: linear-gradient(rgb(var(--c-card)), rgb(var(--c-stripe)));
+  @apply inline-flex h-7 items-center justify-center gap-1 whitespace-nowrap rounded-[2px] border border-line bg-card px-2.5 text-[12.5px] font-medium leading-none text-ink hover:bg-head disabled:cursor-not-allowed disabled:opacity-40;
 }
 .op-button.primary {
-  @apply h-auto rounded border-navy bg-navy px-4 py-2.5 text-[14px] font-bold text-white hover:opacity-90;
-  background-image: none;
+  @apply h-auto rounded-[2px] border-navy bg-navy px-4 py-2 text-[13px] font-semibold text-white hover:opacity-90;
 }
 .op-button.small {
-  @apply text-[12px];
+  @apply h-7 text-[12px];
 }
 .op-button svg,
 .op-text-button svg {
@@ -207,26 +205,25 @@ body {
   @apply bg-transparent;
 }
 .op-panel-top {
-  @apply flex items-center justify-between gap-3 pb-3;
+  @apply flex items-end justify-between gap-3 border-b border-line pb-0;
 }
 .op-tabs {
-  @apply flex items-center gap-3;
+  @apply flex items-end gap-1;
 }
 .op-tabs button {
-  @apply text-[14px] text-navy hover:underline;
+  @apply -mb-px border-b-2 border-transparent px-3 py-2 text-[13.5px] text-ink/60 hover:text-ink;
 }
 .op-tabs .selected {
-  @apply rounded-[10px] bg-navy px-2 py-[3px] text-[12px] font-bold leading-3 text-white hover:no-underline;
+  @apply border-navy font-semibold text-ink;
 }
 .op-filters {
-  @apply mb-3 flex flex-wrap items-center justify-center gap-2;
+  @apply my-3 flex flex-wrap items-center justify-center gap-2;
 }
 .op-search {
-  @apply flex h-[30px] w-[410px] max-w-full items-center rounded border border-line bg-card pl-2 pr-0 text-ink;
-  box-shadow: inset 0 1px 1px rgb(0 0 0 / 0.075);
+  @apply flex h-8 w-[410px] max-w-full items-center rounded-[2px] border border-line bg-card pl-2 pr-0 text-ink;
 }
 .op-search input {
-  @apply h-full w-full border-0 bg-transparent text-[14px] text-ink outline-none placeholder:text-ink/50;
+  @apply h-full w-full border-0 bg-transparent text-[13px] text-ink outline-none placeholder:text-ink/45;
 }
 .op-search > span {
   @apply flex h-full w-8 items-center justify-center text-navy;
@@ -235,26 +232,26 @@ body {
   @apply h-[18px] w-[18px];
 }
 .op-filters select {
-  @apply h-[30px] max-w-full rounded border border-line bg-card px-2 text-[13px];
+  @apply h-8 max-w-full rounded-[2px] border border-line bg-card px-2 text-[13px];
 }
 .op-table-wrap {
   @apply overflow-x-auto;
 }
 .op-table {
-  @apply w-full border-t-2 border-bg text-left text-[12px];
+  @apply w-full border-t border-line text-left text-[12.5px];
   min-width: 850px;
 }
 .op-table th {
-  @apply bg-head px-2 py-1.5 text-[16px] font-bold uppercase text-ink;
+  @apply bg-head px-2.5 py-2 text-[12px] font-semibold text-ink/70;
 }
 .op-table td {
-  @apply border-t border-line px-2 py-2 align-top;
+  @apply border-t border-line px-2.5 py-2.5 align-top;
 }
 .op-table tbody tr:nth-child(odd) {
   @apply bg-stripe;
 }
 .op-table strong {
-  @apply text-[14px] font-bold uppercase;
+  @apply text-[13.5px] font-semibold;
 }
 .op-table small {
   @apply mt-0.5 block max-w-xs text-[12px] leading-4;
@@ -263,26 +260,25 @@ body {
   @apply flex max-w-[240px] flex-wrap gap-1;
 }
 .op-text-button {
-  @apply inline-flex h-[20px] items-center gap-1 whitespace-nowrap rounded-[3px] border border-line px-1.5 text-[12px] uppercase leading-none text-ink hover:bg-head;
-  background-image: linear-gradient(rgb(var(--c-card)), rgb(var(--c-stripe)));
+  @apply inline-flex h-6 items-center gap-1 whitespace-nowrap rounded-[2px] border border-line bg-card px-2 text-[12px] font-medium leading-none text-ink hover:bg-head;
 }
 .op-text-button.danger {
   @apply text-danger;
 }
 .op-badge {
-  @apply inline-flex whitespace-nowrap rounded-[3px] border px-1.5 py-0.5 text-[11px] font-bold uppercase leading-4;
+  @apply inline-flex whitespace-nowrap rounded-[2px] border px-1.5 py-0.5 text-[11px] font-medium leading-4;
 }
 .op-badge.green {
-  @apply border-success/30 bg-success/10 text-success;
+  @apply border-success/60 bg-transparent text-success;
 }
 .op-badge.amber {
-  @apply border-warning/30 bg-warning/10 text-warning;
+  @apply border-warning/60 bg-transparent text-warning;
 }
 .op-badge.gray {
-  @apply border-line bg-stripe text-ink/60;
+  @apply border-line bg-transparent text-ink/55;
 }
 .op-badge.red {
-  @apply border-danger/30 bg-danger/10 text-danger;
+  @apply border-danger/60 bg-transparent text-danger;
 }
 .op-empty {
   @apply mt-2 bg-stripe px-4 py-2 text-center;
@@ -291,7 +287,7 @@ body {
   @apply hidden;
 }
 .op-empty h3 {
-  @apply text-[16px] uppercase text-ink/50;
+  @apply text-[14px] text-ink/55;
 }
 .op-empty p {
   @apply text-[12px] text-ink/50;
@@ -318,7 +314,7 @@ body {
   @apply sticky top-0 z-10 flex items-center justify-between border-b border-line bg-card px-6 py-3;
 }
 .op-dialog-head h2 {
-  @apply text-[22px] font-bold uppercase;
+  @apply text-[18px] font-semibold;
 }
 .op-eyebrow {
   @apply hidden;
@@ -336,13 +332,12 @@ body {
   @apply grid grid-cols-2 gap-x-4 gap-y-3;
 }
 .op-field {
-  @apply block space-y-1 text-[13px] font-bold;
+  @apply block space-y-1 text-[12.5px] font-medium;
 }
 .op-field input,
 .op-field select,
 .op-field textarea {
-  @apply block h-[35px] w-full rounded border border-line bg-card px-2 text-[14px] font-bold text-ink placeholder:font-bold placeholder:uppercase placeholder:text-ink/40;
-  box-shadow: inset 0 1px 1px rgb(0 0 0 / 0.075);
+  @apply block h-8 w-full rounded-[2px] border border-line bg-card px-2 text-[13px] font-normal text-ink placeholder:font-normal placeholder:normal-case placeholder:text-ink/40;
 }
 .op-field textarea {
   @apply h-auto resize-y py-1.5 font-normal;
@@ -354,7 +349,7 @@ body {
   @apply flex flex-wrap gap-x-5 gap-y-2;
 }
 .op-check {
-  @apply flex items-center gap-1.5 text-[13px] font-bold;
+  @apply flex items-center gap-1.5 text-[12.5px];
 }
 .op-check input,
 .op-days input {
@@ -362,13 +357,13 @@ body {
   accent-color: rgb(var(--c-navy));
 }
 .op-section-label {
-  @apply -mx-6 border-y border-line bg-stripe px-6 py-1.5 text-[13px] font-bold;
+  @apply -mx-6 border-y border-line bg-stripe px-6 py-1.5 text-[12.5px] font-semibold;
 }
 .op-form-footer {
   @apply flex justify-end gap-2 pt-2;
 }
 .op-form-footer .primary {
-  @apply px-10 text-[16px];
+  @apply px-8 text-[14px];
 }
 .op-error {
   @apply rounded border border-danger/30 bg-danger/10 px-3 py-2 text-[13px] leading-5 text-danger;
@@ -403,7 +398,7 @@ body {
   @apply mt-3 border-t-2 border-bg;
 }
 .sh-planned-bar {
-  @apply bg-head px-2 py-1.5 text-[16px] font-bold uppercase;
+  @apply bg-head px-3 py-1.5 text-[13px] font-semibold;
 }
 .sh-planned dl {
   @apply grid grid-cols-[180px_1fr] gap-x-4 gap-y-2 bg-card px-4 py-4 text-[13px];
@@ -426,14 +421,13 @@ body {
   @apply mx-auto mt-16 w-full max-w-sm border border-line bg-card p-8;
 }
 .sh-login-box h1 {
-  @apply mb-6 text-[22px] font-bold uppercase;
+  @apply mb-6 text-[20px] font-semibold;
 }
 .sh-login-box label {
   @apply mb-1 block text-[13px] font-bold;
 }
 .sh-login-box input {
-  @apply mb-4 block h-[35px] w-full rounded border border-line bg-card px-2 text-[14px] font-bold;
-  box-shadow: inset 0 1px 1px rgb(0 0 0 / 0.075);
+  @apply mb-4 block h-8 w-full rounded-[2px] border border-line bg-card px-2 text-[13px];
 }
 .sh-login-foot {
   @apply mt-6 flex items-center justify-between text-[11px] text-ink/50;

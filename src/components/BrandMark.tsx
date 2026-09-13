@@ -1,12 +1,21 @@
 import { useTheme } from "../theme/ThemeProvider";
 
-/** Logo trocável (white-label). Usa a inicial do preset ativo. */
-export default function BrandMark({ size = 40 }: { size?: number }) {
+/** Logo do produto. Usa a imagem de public/ quando existir; senão, o monograma. */
+export default function BrandMark({ size = 36 }: { size?: number }) {
   const { preset } = useTheme();
+  if (preset.logo) {
+    return (
+      <img
+        src={preset.logo}
+        alt={`Logo ${preset.name}`}
+        style={{ height: size, width: "auto", display: "block" }}
+      />
+    );
+  }
   return (
     <div
-      className="flex items-center justify-center rounded-full border-2 border-white/80 bg-blue font-extrabold text-white"
-      style={{ width: size, height: size, fontSize: size * 0.45 }}
+      className="flex items-center justify-center rounded-[2px] bg-blue font-semibold text-white"
+      style={{ width: size, height: size, fontSize: size * 0.5 }}
       aria-label={`Logo ${preset.name}`}
     >
       {preset.initials}

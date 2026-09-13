@@ -23,7 +23,7 @@ export default {
         head: c("--c-head"),
       },
       fontFamily: {
-        sans: ["Helvetica Neue", "Helvetica", "Arial", "sans-serif"],
+        sans: ["IBM Plex Sans", "Segoe UI", "Helvetica Neue", "Arial", "sans-serif"],
       },
       boxShadow: {
         card: "0 1px 3px rgb(var(--c-ink) / 0.08), 0 1px 2px rgb(var(--c-ink) / 0.04)",

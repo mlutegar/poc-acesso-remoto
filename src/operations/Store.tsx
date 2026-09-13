@@ -14,10 +14,12 @@ import {
   type Entity,
 } from "./model";
 
-const KEY = "portaris-operations-v1";
+const KEY = "atrio-operations-v1";
+// Chave usada antes da troca de nome; lida uma vez para não perder o que já foi gravado.
+const LEGACY_KEY = "portaris-operations-v1";
 type Item = Entity;
 function read(): Data {
-  const raw = localStorage.getItem(KEY);
+  const raw = localStorage.getItem(KEY) ?? localStorage.getItem(LEGACY_KEY);
   if (!raw) return demoData();
   const value = migrate(JSON.parse(raw) as unknown);
   if (!value) throw new Error("Formato de dados locais inválido.");

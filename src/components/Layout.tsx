@@ -108,16 +108,13 @@ export default function Layout() {
       <header className="sh-top">
         <div className="sh-top-inner">
           <NavLink to="/visitas" className="sh-brand">
-            <BrandMark size={44} />
+            <BrandMark size={36} />
             <div>
               <strong>{preset.name}</strong>
               <small>Controle de acesso</small>
             </div>
           </NavLink>
-          <div className="sh-condo" title="Condomínio Modelo">
-            CM
-          </div>
-          <span className="sh-phone">(61) 3000-0000</span>
+          <span className="sh-phone">Condomínio Modelo · (61) 3000-0000</span>
           <div className="sh-tools">
             <button type="button" title="Anotações do turno" aria-label="Anotações do turno">
               <Icon name="note" />
@@ -128,7 +125,6 @@ export default function Layout() {
             <button type="button" title="Procedimentos" aria-label="Procedimentos">
               <Icon name="info" />
             </button>
-            <span className="sh-condo-name">condomínio modelo</span>
             <details className="sh-user">
               <summary>
                 <Icon name="user" /> {user}

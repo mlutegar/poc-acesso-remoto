@@ -1,4 +1,4 @@
-# Portaris — POC Controle de Acesso / Portaria Remota
+# Átrio — POC Controle de Acesso / Portaria Remota
 
 Protótipo **front-end** (white-label) do módulo de controle de acesso remoto.
 Cliente âncora: Grupo R Johnson (marca **não** vinculada — produto revendável).
@@ -26,7 +26,7 @@ npm run typecheck # tsc --noEmit
 - **Pessoas**: moradores/visitantes e credenciais (facial/TAG/placa).
 - **Veículos (LPR)**: acesso veicular por placa (Hikvision 406) e TAG (Control iD).
 - **Dispositivos**: status online/offline/atenção dos equipamentos reais.
-- **White-label em runtime**: seletor de marca (Portaris / Vigio / Sentric) troca nome + paleta na hora.
+- **White-label em runtime**: a identidade (nome, logo e paleta) vem de `src/theme/tokens.ts`.
 - **Dark mode** + acessibilidade (aria-labels, foco, contraste).
 - Responsivo (sidebar vira drawer no mobile).
 
