@@ -176,6 +176,7 @@ Não é só "ligar o aparelho". Precisa de: o modelo instalado em cada ponto de 
 - A logo virou PNG com **fundo transparente** (preenchimento a partir das bordas, sem tocar no desenho; o JPEG original tinha fundo `#f9f9f9` com ruído entre `#f8` e `#f9`, que deixava um retângulo visível sobre o branco). A barra de marca usa exatamente `#f9f9f9` (`--c-brandbar`) por segurança; no modo escuro a barra e a placa da logo ficam escuras.
 - Como só há uma marca, o seletor de marca some do login e do menu do usuário; fica o alternador claro/escuro.
 - Duas versões da logo: `logo-atrio.png` completa, com o slogan, usada grande no login (124px), e `logo-atrio-marca.png` só com o "A" e o nome, usada no cabeçalho (48px numa barra de 72px). No cabeçalho o slogan é **texto tipografado** ao lado da marca, na cor azul-aço do "A": dentro da imagem, a 48px, ele teria 4px de altura e seria ilegível. A barra do login mostra só o condomínio, para não repetir a marca.
+- Ícone do navegador (favicon) e ícone de tela inicial gerados a partir do "A" da logo, isolado e centralizado num quadrado com fundo transparente: `favicon.png` (64px), `favicon-32.png`, `apple-touch-icon.png` (180px) e `icone-512.png` como base, todos em `public/` e ligados no `index.html`.
 
 ## O que não mudou
 
