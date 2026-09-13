@@ -18,9 +18,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const saved = localStorage.getItem("brand");
     return presets.find((p) => p.id === saved) ?? defaultPreset;
   });
-  const [mode, setMode] = useState<Mode>(
-    () => (localStorage.getItem("mode") as Mode) ?? "light"
-  );
+  const [mode, setMode] = useState<Mode>(() => (localStorage.getItem("mode") as Mode) ?? "light");
 
   useEffect(() => {
     const root = document.documentElement;

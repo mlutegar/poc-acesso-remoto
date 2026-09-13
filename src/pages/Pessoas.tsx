@@ -35,11 +35,17 @@ export default function Pessoas() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="flex h-11 w-11 items-center justify-center rounded-full bg-navy text-sm font-bold text-white">
-                      {p.name.split(" ").map((n) => n[0]).slice(0, 2).join("")}
+                      {p.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .slice(0, 2)
+                        .join("")}
                     </div>
                     <div>
                       <p className="font-semibold text-ink">{p.name}</p>
-                      <p className="text-xs text-ink/50">{p.role} • {p.unit}</p>
+                      <p className="text-xs text-ink/50">
+                        {p.role} • {p.unit}
+                      </p>
                     </div>
                   </div>
                   <span
@@ -50,7 +56,10 @@ export default function Pessoas() {
                 </div>
                 <div className="mt-4 flex flex-wrap gap-1.5">
                   {p.credentials.map((c) => (
-                    <span key={c} className="rounded-md bg-blue/10 px-2 py-0.5 text-xs font-medium text-blue">
+                    <span
+                      key={c}
+                      className="rounded-md bg-blue/10 px-2 py-0.5 text-xs font-medium text-blue"
+                    >
                       {credLabel[c]}
                     </span>
                   ))}

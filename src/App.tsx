@@ -10,25 +10,32 @@ import Issues from "./operations/Issues";
 import Notices from "./operations/Notices";
 import Veiculos from "./pages/Veiculos";
 import Dispositivos from "./pages/Dispositivos";
-import Previsto from "./pages/Previsto";
-import { MENU, type MenuItem } from "./components/Layout";
-
-// Itens do menu sem tela própria caem na página de módulo previsto.
-const BUILT = new Set([
-  "/visitas",
-  "/correspondencias",
-  "/condominos",
-  "/residencias",
-  "/pre-autorizacoes",
-  "/ocorrencias",
-  "/comunicados",
-  "/operacao",
-  "/eventos",
-  "/veiculos",
-  "/dispositivos",
-]);
-const planned = (items: MenuItem[]): string[] =>
-  items.flatMap((i) => (i.children ? planned(i.children) : i.to && !BUILT.has(i.to) ? [i.to] : []));
+import Usuarios from "./preview/Usuarios";
+import Funcionarios from "./preview/Funcionarios";
+import Enquetes from "./preview/Enquetes";
+import Assembleias from "./preview/Assembleias";
+import Achados from "./preview/Achados";
+import Manutencoes from "./preview/Manutencoes";
+import Bloqueios from "./preview/Bloqueios";
+import Documentos from "./preview/Documentos";
+import Produtos from "./preview/Produtos";
+import Inventarios from "./preview/Inventarios";
+import Objetos from "./preview/Objetos";
+import Fornecedores from "./preview/Fornecedores";
+import Procedimentos from "./preview/Procedimentos";
+import Turnos from "./preview/Turnos";
+import RelatorioVisitas from "./preview/RelatorioVisitas";
+import RelatorioCorrespondencias from "./preview/RelatorioCorrespondencias";
+import Diario from "./preview/Diario";
+import Ligacoes from "./preview/Ligacoes";
+import FilaSip from "./preview/FilaSip";
+import BioRfid from "./preview/BioRfid";
+import LogNotificacoes from "./preview/LogNotificacoes";
+import LogEmails from "./preview/LogEmails";
+import LogUsuarios from "./preview/LogUsuarios";
+import Acionadores from "./preview/Acionadores";
+import Cameras from "./preview/Cameras";
+import Condominio from "./preview/Condominio";
 
 export default function App() {
   return (
@@ -54,9 +61,32 @@ export default function App() {
         <Route path="/pessoas" element={<Navigate to="/condominos" replace />} />
         <Route path="/veiculos" element={<Veiculos />} />
         <Route path="/dispositivos" element={<Dispositivos />} />
-        {planned(MENU).map((to) => (
-          <Route key={to} path={to} element={<Previsto />} />
-        ))}
+        <Route path="/usuarios" element={<Usuarios />} />
+        <Route path="/funcionarios" element={<Funcionarios />} />
+        <Route path="/enquetes" element={<Enquetes />} />
+        <Route path="/assembleias" element={<Assembleias />} />
+        <Route path="/achados" element={<Achados />} />
+        <Route path="/manutencoes" element={<Manutencoes />} />
+        <Route path="/bloqueios" element={<Bloqueios />} />
+        <Route path="/documentos" element={<Documentos />} />
+        <Route path="/produtos" element={<Produtos />} />
+        <Route path="/inventarios" element={<Inventarios />} />
+        <Route path="/objetos" element={<Objetos />} />
+        <Route path="/fornecedores" element={<Fornecedores />} />
+        <Route path="/procedimentos" element={<Procedimentos />} />
+        <Route path="/turnos" element={<Turnos />} />
+        <Route path="/relatorios/visitas" element={<RelatorioVisitas />} />
+        <Route path="/relatorios/correspondencias" element={<RelatorioCorrespondencias />} />
+        <Route path="/diario" element={<Diario />} />
+        <Route path="/ligacoes" element={<Ligacoes />} />
+        <Route path="/fila-sip" element={<FilaSip />} />
+        <Route path="/bio-rfid" element={<BioRfid />} />
+        <Route path="/log-notificacoes" element={<LogNotificacoes />} />
+        <Route path="/log-emails" element={<LogEmails />} />
+        <Route path="/log-usuarios" element={<LogUsuarios />} />
+        <Route path="/acionadores" element={<Acionadores />} />
+        <Route path="/cameras" element={<Cameras />} />
+        <Route path="/condominio" element={<Condominio />} />
         <Route path="*" element={<Navigate to="/visitas" replace />} />
       </Route>
     </Routes>

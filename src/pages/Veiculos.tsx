@@ -29,7 +29,9 @@ export default function Veiculos() {
                 </span>
               </div>
               <p className="mt-3 text-base font-bold text-ink">{v.model}</p>
-              <p className="text-sm text-ink/60">{v.owner} • {v.unit}</p>
+              <p className="text-sm text-ink/60">
+                {v.owner} • {v.unit}
+              </p>
               <p className="mt-2 text-xs text-ink/40">Último acesso: {v.lastAccess}</p>
             </div>
           ))}

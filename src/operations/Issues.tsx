@@ -2,6 +2,7 @@ import { useState, type FormEvent } from "react";
 import { useAuth } from "../auth/AuthProvider";
 import { Feedback, History, Pagination, Tabs, useListParams, PAGE_SIZE } from "./List";
 import { Icon } from "../components/Icons";
+import { PhotoField } from "../components/Photo";
 import { useOperations } from "./Store";
 import { issueLabels, normalize, unitName, type Issue, type Resident } from "./model";
 import { Check, downloadCsv, Empty, Field, formatDate, Modal } from "./UI";
@@ -275,6 +276,7 @@ export default function Issues() {
           }}
         >
           <form className="op-form" onSubmit={submit}>
+            <PhotoField label="Foto da ocorrência" kind="objeto" />
             <div className="op-form-grid">
               <Field label="Tipo" name="kind" value={edit.item?.kind || kinds[0]} required>
                 {kinds.map((k) => (

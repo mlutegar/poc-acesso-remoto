@@ -11,7 +11,9 @@ const map: Record<string, { label: string; dot: string; bg: string; text: string
 export default function StatusBadge({ status }: { status: AccessStatus | DeviceStatus }) {
   const s = map[status] ?? map.atencao;
   return (
-    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${s.bg} ${s.text}`}>
+    <span
+      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${s.bg} ${s.text}`}
+    >
       <span className={`h-2 w-2 rounded-full ${s.dot}`} />
       {s.label}
     </span>

@@ -1,7 +1,12 @@
 import type { AccessEvent } from "../data/mock";
 
 const styles: Record<string, { border: string; ring: string; icon: string; label: string }> = {
-  autorizado: { border: "border-l-success", ring: "text-success", icon: "🟢", label: "ACESSO AUTORIZADO" },
+  autorizado: {
+    border: "border-l-success",
+    ring: "text-success",
+    icon: "🟢",
+    label: "ACESSO AUTORIZADO",
+  },
   negado: { border: "border-l-danger", ring: "text-danger", icon: "🔴", label: "ACESSO NEGADO" },
   atencao: { border: "border-l-warning", ring: "text-warning", icon: "🟠", label: "ATENÇÃO" },
 };

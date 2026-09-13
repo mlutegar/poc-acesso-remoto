@@ -15,6 +15,8 @@ const paths = {
   check: "M5 12l4 4 10-10",
   clock: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 4v5l3 2",
   chevron: "M6 9l6 6 6-6",
+  camera: "M4 8h3l1.5-2h7L17 8h3v11H4V8Zm8 8.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z",
+  box: "M3 8.5 12 4l9 4.5V17L12 21l-9-4L3 8.5Zm0 0 9 4.5m0 0 9-4.5m-9 4.5V21",
 } as const;
 
 export type IconName = keyof typeof paths;

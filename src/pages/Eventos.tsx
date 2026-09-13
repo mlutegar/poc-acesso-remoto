@@ -41,7 +41,9 @@ export default function Eventos() {
               key={f.key}
               onClick={() => setFilter(f.key)}
               className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
-                filter === f.key ? "bg-navy text-white" : "bg-card text-ink/60 shadow-card hover:text-ink"
+                filter === f.key
+                  ? "bg-navy text-white"
+                  : "bg-card text-ink/60 shadow-card hover:text-ink"
               }`}
             >
               {f.label}
@@ -76,7 +78,9 @@ export default function Eventos() {
                   onClick={() => setSelected(e)}
                   className="cursor-pointer border-b border-ink/5 last:border-0 hover:bg-bg/60"
                 >
-                  <td className="px-5 py-3"><StatusBadge status={e.status} /></td>
+                  <td className="px-5 py-3">
+                    <StatusBadge status={e.status} />
+                  </td>
                   <td className="px-5 py-3 font-medium text-ink">{e.person}</td>
                   <td className="px-5 py-3 text-ink/70">{e.role}</td>
                   <td className="px-5 py-3 text-ink/70">{e.door}</td>

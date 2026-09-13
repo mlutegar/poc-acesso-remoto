@@ -10,13 +10,7 @@ const links = [
   { to: "/dispositivos", label: "Dispositivos", icon: "⚏" },
 ];
 
-export default function Sidebar({
-  open,
-  onClose,
-}: {
-  open: boolean;
-  onClose: () => void;
-}) {
+export default function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { preset } = useTheme();
 
   return (
@@ -46,7 +40,9 @@ export default function Sidebar({
               onClick={onClose}
               className={({ isActive }) =>
                 `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${
-                  isActive ? "bg-blue text-white" : "text-white/70 hover:bg-white/10 hover:text-white"
+                  isActive
+                    ? "bg-blue text-white"
+                    : "text-white/70 hover:bg-white/10 hover:text-white"
                 }`
               }
             >

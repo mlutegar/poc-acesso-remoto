@@ -48,7 +48,9 @@ export default function Dashboard() {
                 onClick={() => setPaused((p) => !p)}
                 className="inline-flex items-center gap-1.5 text-xs font-semibold text-ink/50 hover:text-ink"
               >
-                <span className={`h-2 w-2 rounded-full ${paused ? "bg-ink/30" : "animate-pulse bg-blue"}`} />
+                <span
+                  className={`h-2 w-2 rounded-full ${paused ? "bg-ink/30" : "animate-pulse bg-blue"}`}
+                />
                 {paused ? "Pausado" : "Tempo real"}
               </button>
             </div>
@@ -84,7 +86,10 @@ export default function Dashboard() {
               <h2 className="mb-3 text-lg font-bold text-ink">Dispositivos</h2>
               <div className="space-y-2">
                 {devices.map((d) => (
-                  <div key={d.id} className="flex items-center justify-between rounded-lg bg-card p-3 shadow-card">
+                  <div
+                    key={d.id}
+                    className="flex items-center justify-between rounded-lg bg-card p-3 shadow-card"
+                  >
                     <div>
                       <p className="text-sm font-semibold text-ink">{d.name}</p>
                       <p className="text-xs text-ink/50">{d.location}</p>

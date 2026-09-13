@@ -497,3 +497,47 @@ body {
     @apply grid-cols-1;
   }
 }
+
+/* Espaço reservado para foto: mesmo lugar e tamanho do original, sem imagem. */
+.sh-cell {
+  @apply flex items-start gap-2;
+}
+.sh-photo {
+  @apply relative inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[3px] border-2 border-line bg-stripe text-[13px] font-bold text-ink/45;
+}
+.sh-photo.green {
+  @apply border-success/50;
+}
+.sh-photo.amber {
+  @apply border-warning/50;
+}
+.sh-photo.red {
+  @apply border-danger/50;
+}
+.sh-photo.lg {
+  @apply h-28 w-28;
+}
+.sh-photo-glyph {
+  @apply h-5 w-5;
+}
+.sh-photo.lg .sh-photo-glyph {
+  @apply h-8 w-8;
+}
+.sh-photo-badge {
+  @apply absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full border border-line bg-card text-ink/40;
+}
+.sh-photo-badge svg {
+  @apply h-2.5 w-2.5;
+}
+.sh-photo-field {
+  @apply flex flex-col items-center gap-2 rounded border border-line bg-stripe p-3 text-center;
+}
+.sh-photo-field-label {
+  @apply text-[13px] font-bold;
+}
+.sh-photo-field small {
+  @apply text-[11px] text-ink/45;
+}
+.sh-photo-actions {
+  @apply flex gap-1;
+}

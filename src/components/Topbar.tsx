@@ -2,29 +2,21 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthProvider";
 import ThemeSwitcher from "./ThemeSwitcher";
 
-export default function Topbar({
-  title,
-  onMenu,
-}: {
-  title: string;
-  onMenu?: () => void;
-}) {
+export default function Topbar({ title, onMenu }: { title: string; onMenu?: () => void }) {
   const navigate = useNavigate();
   const { logout } = useAuth();
 
   return (
     <header className="flex items-center justify-between gap-3 border-b border-ink/10 bg-card px-4 py-4 sm:px-8">
       <div className="flex items-center gap-3">
-        <button
-          onClick={onMenu}
-          aria-label="Abrir menu"
-          className="text-xl text-ink/60 lg:hidden"
-        >
+        <button onClick={onMenu} aria-label="Abrir menu" className="text-xl text-ink/60 lg:hidden">
           ☰
         </button>
         <div>
           <h1 className="text-lg font-bold text-ink sm:text-xl">{title}</h1>
-          <p className="hidden text-xs text-ink/50 sm:block">Condomínio Modelo • Portaria Central</p>
+          <p className="hidden text-xs text-ink/50 sm:block">
+            Condomínio Modelo • Portaria Central
+          </p>
         </div>
       </div>
       <div className="flex items-center gap-3">

@@ -118,3 +118,23 @@ Nada foi copiado do sistema de referência. Nomes, endereços, telefones, placas
 - `npm test`: 22 testes (4 novos). Os novos conferem que o conjunto passa pelo `isData`, que cada cadastro passa pela mesma `validate` usada ao salvar pela interface, que as regras de negócio são respeitadas (documento único, um principal por residência, nenhuma visita aberta repetida, responsáveis ativos) e que todas as situações de cada módulo aparecem.
 - `npm run build` e `npx eslint` sem erros.
 - Conferido no navegador: as seis telas com os dados, o botão de recarregar gravando as 12+21+16+12+7+6 linhas, e uma gravação normal em cima dos dados de demonstração (aviso de correspondência) subindo a revisão e o histórico.
+
+# Telas de prévia e espaço de foto — 13/09/2026
+
+## Entregue
+
+- **26 telas novas**, uma por arquivo em `src/preview/`, cobrindo todos os itens do menu que antes caíam numa página de texto: Usuários, Funcionários, Enquetes, Assembleia, Achados/Perdidos, os nove de Gestão, os nove de Relatórios e telefonia e os quatro de Configurações. São listagens navegáveis com colunas, abas, busca, paginação, atalhos e dados fictícios, mais o formulário de cadastro com os campos do original.
+- Cada módulo tem **seu próprio arquivo**, com as colunas, as linhas e os campos dele, importando só os blocos já compartilhados (`Tabs`, `Pagination`, `Feedback`, `Photo`, classes do CSS). A ideia é que ligar um módulo aos dados depois seja mexer em um arquivo só, como foi com correspondências e ocorrências.
+- Nenhuma dessas telas grava. Ao clicar em Salvar aparece "Esta prévia mostra os campos do cadastro, mas ainda não grava"; nas demais ações, "Nesta prévia esta ação ainda não está ligada aos dados". É o mínimo para ninguém achar que cadastrou e perder o registro.
+- `Condomínio` é a única que não é listagem: tem abas Dados gerais, Aparência e Parâmetros, esta última com uma amostra dos controles que afetam os módulos já construídos.
+- **Espaço de foto** onde o original tem foto: visitante e condômino na listagem (iniciais do nome, borda na cor da situação e selo de câmera), encomenda (ícone de pacote), e o quadro com os botões Câmera e Arquivo nos cadastros de condômino, visitante, correspondência e ocorrência. É só apresentação — não muda o modelo de dados nem grava imagem, que em `localStorage` estouraria a cota.
+
+## Verificação
+
+- `npm test`: 25 testes (3 novos). Os novos garantem que todo item do menu tem rota, que toda tela de prévia está roteada, e que nenhuma prévia com formulário deixa de avisar que não grava.
+- `npm run build` e `npx eslint` sem erros. Conferido no navegador: listagem com foto, formulário de exemplo com o quadro de foto, os dois avisos e a aba de parâmetros do condomínio.
+- Um documento inventado para a tela de bloqueios saiu como CPF válido por acaso e foi trocado automaticamente por um inválido, pela mesma guarda usada no conjunto de demonstração.
+
+## Limites
+
+As prévias mostram dados fixos escritos no próprio arquivo: busca e abas filtram essas linhas, mas nada é gravado, e os números não conversam com os módulos que funcionam. O design é o mesmo das telas prontas, então refinar a aparência depois vale para todas de uma vez.

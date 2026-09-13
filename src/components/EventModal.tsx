@@ -39,7 +39,9 @@ export default function EventModal({
       >
         <div className="flex items-center justify-between border-b border-ink/10 px-5 py-4">
           <h2 className="text-lg font-bold text-ink">Detalhe do acesso</h2>
-          <button onClick={onClose} aria-label="Fechar" className="text-ink/50 hover:text-ink">✕</button>
+          <button onClick={onClose} aria-label="Fechar" className="text-ink/50 hover:text-ink">
+            ✕
+          </button>
         </div>
 
         <div className="p-5">
@@ -61,12 +63,27 @@ export default function EventModal({
           </div>
 
           <dl className="mt-5 grid grid-cols-2 gap-3 text-sm">
-            <div><dt className="text-ink/50">Porta</dt><dd className="font-medium text-ink">{event.door}</dd></div>
-            <div><dt className="text-ink/50">Horário</dt><dd className="font-medium text-ink">{event.time}</dd></div>
-            <div><dt className="text-ink/50">Credencial</dt><dd className="font-medium text-ink">{credLabel[event.credential]}</dd></div>
-            <div><dt className="text-ink/50">Dispositivo</dt><dd className="font-medium text-ink">{event.device ?? "—"}</dd></div>
+            <div>
+              <dt className="text-ink/50">Porta</dt>
+              <dd className="font-medium text-ink">{event.door}</dd>
+            </div>
+            <div>
+              <dt className="text-ink/50">Horário</dt>
+              <dd className="font-medium text-ink">{event.time}</dd>
+            </div>
+            <div>
+              <dt className="text-ink/50">Credencial</dt>
+              <dd className="font-medium text-ink">{credLabel[event.credential]}</dd>
+            </div>
+            <div>
+              <dt className="text-ink/50">Dispositivo</dt>
+              <dd className="font-medium text-ink">{event.device ?? "—"}</dd>
+            </div>
             {event.reason && (
-              <div className="col-span-2"><dt className="text-ink/50">Motivo</dt><dd className="font-medium text-danger">{event.reason}</dd></div>
+              <div className="col-span-2">
+                <dt className="text-ink/50">Motivo</dt>
+                <dd className="font-medium text-danger">{event.reason}</dd>
+              </div>
             )}
           </dl>
 
@@ -85,8 +102,12 @@ export default function EventModal({
           )}
 
           <div className="mt-6 flex gap-2">
-            <button className="flex-1 rounded-lg bg-success py-2 text-sm font-semibold text-white hover:opacity-90">Abrir porta</button>
-            <button className="flex-1 rounded-lg bg-blue py-2 text-sm font-semibold text-white hover:opacity-90">Chamar interfone</button>
+            <button className="flex-1 rounded-lg bg-success py-2 text-sm font-semibold text-white hover:opacity-90">
+              Abrir porta
+            </button>
+            <button className="flex-1 rounded-lg bg-blue py-2 text-sm font-semibold text-white hover:opacity-90">
+              Chamar interfone
+            </button>
           </div>
         </div>
       </div>

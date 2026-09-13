@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Editor, type Edit } from "./Forms";
 import { Icon } from "../components/Icons";
+import { Photo } from "../components/Photo";
 import { useOperations } from "./Store";
 import {
   matchingPermit,
@@ -367,10 +368,15 @@ export default function Operations({ kind }: { kind: CoreCollection }) {
                     return (
                       <tr key={r.id}>
                         <td>
-                          <strong>{r.name}</strong>
-                          <small>
-                            {r.document} · {r.principal ? "Principal" : r.relationship}
-                          </small>
+                          <div className="sh-cell">
+                            <Photo name={r.name} tone={r.active ? "green" : ""} />
+                            <div>
+                              <strong>{r.name}</strong>
+                              <small>
+                                {r.document} · {r.principal ? "Principal" : r.relationship}
+                              </small>
+                            </div>
+                          </div>
                         </td>
                         <td>
                           {unitName(home(r))}
@@ -438,11 +444,27 @@ export default function Operations({ kind }: { kind: CoreCollection }) {
                   return (
                     <tr key={v.id}>
                       <td>
-                        <strong>{v.name}</strong>
-                        <small>
-                          {v.document} {v.plate && `· ${v.plate}`}
-                        </small>
-                        <small>{v.purpose}</small>
+                        <div className="sh-cell">
+                          <Photo
+                            name={v.name}
+                            tone={
+                              v.status === "pendente"
+                                ? "amber"
+                                : v.status === "negada"
+                                  ? "red"
+                                  : v.status === "finalizada"
+                                    ? ""
+                                    : "green"
+                            }
+                          />
+                          <div>
+                            <strong>{v.name}</strong>
+                            <small>
+                              {v.document} {v.plate && `· ${v.plate}`}
+                            </small>
+                            <small>{v.purpose}</small>
+                          </div>
+                        </div>
                       </td>
                       <td>
                         {unitName(home(residentFor(v)))}

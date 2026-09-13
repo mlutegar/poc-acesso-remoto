@@ -10,9 +10,7 @@ interface AuthCtx {
 const Ctx = createContext<AuthCtx | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<string | null>(
-    () => sessionStorage.getItem("user")
-  );
+  const [user, setUser] = useState<string | null>(() => sessionStorage.getItem("user"));
 
   const login = (u: string) => {
     sessionStorage.setItem("user", u);

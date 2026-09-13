@@ -2,6 +2,7 @@ import { useState, type FormEvent } from "react";
 import { useAuth } from "../auth/AuthProvider";
 import { Feedback, History, Pagination, Tabs, useListParams, PAGE_SIZE } from "./List";
 import { Icon } from "../components/Icons";
+import { Photo, PhotoField } from "../components/Photo";
 import { useOperations } from "./Store";
 import { mailLabels, normalize, unitName, type Mail, type Resident } from "./model";
 import { downloadCsv, Empty, Field, formatDate, Modal } from "./UI";
@@ -189,11 +190,16 @@ export default function MailPage() {
                 {pageRows.map((m) => (
                   <tr key={m.id}>
                     <td>
-                      <strong>{m.description}</strong>
-                      <small>
-                        {m.tracking || "Sem rastreio"} {m.carrier && `· ${m.carrier}`}
-                      </small>
-                      {m.attachment && <small>Anexo: {m.attachment}</small>}
+                      <div className="sh-cell">
+                        <Photo kind="objeto" tone={m.status === "retirada" ? "" : "amber"} />
+                        <div>
+                          <strong>{m.description}</strong>
+                          <small>
+                            {m.tracking || "Sem rastreio"} {m.carrier && `· ${m.carrier}`}
+                          </small>
+                          {m.attachment && <small>Anexo: {m.attachment}</small>}
+                        </div>
+                      </div>
                     </td>
                     <td>
                       {residentFor(m)?.name}
@@ -268,6 +274,7 @@ export default function MailPage() {
           }}
         >
           <form className="op-form" onSubmit={submit}>
+            <PhotoField label="Foto da encomenda" kind="objeto" />
             <div className="op-form-grid">
               <Field label="Destinatário" name="residentId" value={edit.item?.residentId} required>
                 <option value="">Selecione o condômino</option>

@@ -10,6 +10,7 @@ import {
   type Visit,
 } from "./model";
 import { Check, Field, Modal } from "./UI";
+import { PhotoField } from "../components/Photo";
 export type Edit = { kind: CoreCollection; item?: Unit | Resident | Permit | Visit };
 const titles = {
   units: "residência",
@@ -147,6 +148,7 @@ export function Editor({
         )}
         {kind === "residents" && (
           <>
+            <PhotoField label="Foto do condômino" />
             <div className="op-section-label">Vínculo com a residência</div>
             <Field label="Residência" name="unitId" value={resident?.unitId} required>
               <option value="">Selecione a residência</option>
@@ -199,6 +201,7 @@ export function Editor({
         )}
         {(kind === "permits" || kind === "visits") && (
           <>
+            {kind === "visits" && <PhotoField label="Foto do visitante" />}
             <div className="op-form-grid">
               <Field label="Nome do visitante" name="name" value={item?.name} required />
               <Field
