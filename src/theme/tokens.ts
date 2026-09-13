@@ -19,7 +19,7 @@ export const presets: ThemePreset[] = [
     name: "Átrio",
     tagline: "Seu condomínio sob controle",
     initials: "A",
-    logo: "/logo-atrio.jpeg",
+    logo: "/logo-atrio.png",
     // medidas na própria logo: #182838 no nome, #405870 no "A"
     navy: "24 40 56",
     blue: "64 88 112",

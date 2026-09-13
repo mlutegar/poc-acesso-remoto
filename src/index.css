@@ -18,6 +18,7 @@
   --c-line: 221 221 221;
   --c-stripe: 249 249 249;
   --c-head: 224 224 224;
+  --c-brandbar: 249 249 249;
 }
 
 [data-mode="dark"] {
@@ -27,6 +28,7 @@
   --c-line: 60 66 76;
   --c-stripe: 40 45 53;
   --c-head: 52 58 68;
+  --c-brandbar: 34 39 47;
 }
 
 html,
@@ -48,7 +50,8 @@ body {
 
 /* Cabeçalho superior: identificação à esquerda, atalhos e usuário à direita. */
 .sh-top {
-  @apply border-b border-line bg-card text-ink;
+  @apply border-b border-line text-ink;
+  background: rgb(var(--c-brandbar));
 }
 .sh-top-inner {
   @apply mx-auto flex h-16 w-full max-w-[960px] items-center gap-5 px-2.5;
@@ -106,9 +109,10 @@ body {
   @apply mt-3 flex items-center justify-between gap-2 border-t border-line pt-3;
 }
 
-/* A logo é JPEG com fundo claro: a placa branca a mantém legível também no modo escuro. */
+/* A logo tem fundo transparente; a placa usa a cor da barra, e no modo escuro fica escura também. */
 .sh-logo {
-  @apply block rounded-[2px] bg-white;
+  @apply block rounded-[2px];
+  background: rgb(var(--c-brandbar));
 }
 
 /* Barra de menu. */
@@ -420,7 +424,8 @@ body {
   @apply flex min-h-full flex-col bg-bg;
 }
 .sh-login-top {
-  @apply border-b border-line bg-card;
+  @apply border-b border-line;
+  background: rgb(var(--c-brandbar));
 }
 .sh-login-box {
   @apply mx-auto mt-16 w-full max-w-sm border border-line bg-card p-8;

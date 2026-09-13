@@ -173,7 +173,7 @@ Não é só "ligar o aparelho". Precisa de: o modelo instalado em cada ponto de 
 - O produto passa a se chamar **Átrio**, com a logo em `public/logo-atrio.jpeg` (recortada das margens; o arquivo original está em `docs/marca/`). O nome aparece no título da aba, no cabeçalho, no login e na documentação. A chave do armazenamento local mudou para `atrio-operations-v1`, lendo a antiga uma vez para ninguém perder o que já cadastrou.
 - Paleta medida na própria logo: azul-marinho `#182838` (nome) e azul-aço `#405870` (o "A"). São os tokens `--c-navy` e `--c-blue`.
 - Barra de marca clara com a logo, menu escuro na cor da marca, ambos alinhados à mesma coluna de 960px do conteúdo. Menu plano com o item ativo sublinhado. Fonte IBM Plex Sans. Títulos, botões, abas, cabeçalhos de tabela e selos em caixa normal; caixa alta só no menu. Selos em contorno, botões sem gradiente, cantos de 2px.
-- A logo é JPEG com fundo claro; no modo escuro ela recebe uma placa branca para continuar legível.
+- A logo virou PNG com **fundo transparente** (preenchimento a partir das bordas, sem tocar no desenho; o JPEG original tinha fundo `#f9f9f9` com ruído entre `#f8` e `#f9`, que deixava um retângulo visível sobre o branco). A barra de marca usa exatamente `#f9f9f9` (`--c-brandbar`) por segurança; no modo escuro a barra e a placa da logo ficam escuras.
 - Como só há uma marca, o seletor de marca some do login e do menu do usuário; fica o alternador claro/escuro.
 
 ## O que não mudou
