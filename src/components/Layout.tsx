@@ -108,11 +108,13 @@ export default function Layout() {
       <header className="sh-top">
         <div className="sh-top-inner">
           <NavLink to="/visitas" className="sh-brand">
-            <BrandMark size={36} />
-            <div>
-              <strong>{preset.name}</strong>
-              <small>Controle de acesso</small>
-            </div>
+            <BrandMark size={40} />
+            {!preset.logo && (
+              <div>
+                <strong>{preset.name}</strong>
+                <small>Controle de acesso</small>
+              </div>
+            )}
           </NavLink>
           <span className="sh-phone">Condomínio Modelo · (61) 3000-0000</span>
           <div className="sh-tools">

@@ -17,11 +17,12 @@ export const presets: ThemePreset[] = [
   {
     id: "atrio",
     name: "Átrio",
-    tagline: "Controle de Acesso & Portaria Remota",
+    tagline: "Seu condomínio sob controle",
     initials: "A",
-    logo: "",
-    navy: "11 31 58",
-    blue: "20 110 245",
+    logo: "/logo-atrio.jpeg",
+    // medidas na própria logo: #182838 no nome, #405870 no "A"
+    navy: "24 40 56",
+    blue: "64 88 112",
   },
 ];
 

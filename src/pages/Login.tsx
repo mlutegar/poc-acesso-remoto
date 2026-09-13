@@ -20,14 +20,16 @@ export default function Login() {
     <div className="sh-login">
       <div className="sh-login-top">
         <div className="sh-top-inner">
-          <div className="sh-brand text-white">
-            <BrandMark size={36} />
-            <div>
-              <strong>{preset.name}</strong>
-              <small>Controle de acesso</small>
-            </div>
+          <div className="sh-brand">
+            <BrandMark size={40} />
+            {!preset.logo && (
+              <div>
+                <strong>{preset.name}</strong>
+                <small>Controle de acesso</small>
+              </div>
+            )}
           </div>
-          <span className="sh-phone text-white">Condomínio Modelo · (61) 3000-0000</span>
+          <span className="sh-phone">Condomínio Modelo · (61) 3000-0000</span>
         </div>
       </div>
       <form className="sh-login-box" onSubmit={submit}>

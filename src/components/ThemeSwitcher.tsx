@@ -6,22 +6,26 @@ export default function ThemeSwitcher() {
 
   return (
     <div className="flex items-center gap-2">
-      <label className="sr-only" htmlFor="brand-select">
-        Marca
-      </label>
-      <select
-        id="brand-select"
-        value={preset.id}
-        onChange={(e) => setPreset(e.target.value)}
-        className="h-8 rounded border border-line bg-card px-2 text-xs text-ink outline-none focus:border-blue"
-        title="Trocar marca (white-label)"
-      >
-        {presets.map((p) => (
-          <option key={p.id} value={p.id}>
-            {p.name}
-          </option>
-        ))}
-      </select>
+      {presets.length > 1 && (
+        <>
+          <label className="sr-only" htmlFor="brand-select">
+            Marca
+          </label>
+          <select
+            id="brand-select"
+            value={preset.id}
+            onChange={(e) => setPreset(e.target.value)}
+            className="h-8 rounded border border-line bg-card px-2 text-xs text-ink outline-none focus:border-blue"
+            title="Trocar marca (white-label)"
+          >
+            {presets.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name}
+              </option>
+            ))}
+          </select>
+        </>
+      )}
       <button
         onClick={toggleMode}
         aria-label={mode === "light" ? "Ativar modo escuro" : "Ativar modo claro"}

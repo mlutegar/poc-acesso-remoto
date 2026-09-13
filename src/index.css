@@ -7,8 +7,8 @@
    fundo cinza-claro, cabeçalho e menu em azul-escuro, títulos em caixa alta,
    listagens compactas em tabela zebrada. */
 :root {
-  --c-navy: 11 31 58;
-  --c-blue: 20 110 245;
+  --c-navy: 24 40 56;
+  --c-blue: 64 88 112;
   --c-bg: 238 238 238;
   --c-card: 255 255 255;
   --c-success: 22 133 60;
@@ -48,7 +48,7 @@ body {
 
 /* Cabeçalho superior: identificação à esquerda, atalhos e usuário à direita. */
 .sh-top {
-  @apply bg-navy text-white;
+  @apply border-b border-line bg-card text-ink;
 }
 .sh-top-inner {
   @apply mx-auto flex h-16 w-full max-w-[960px] items-center gap-5 px-2.5;
@@ -60,20 +60,20 @@ body {
   @apply block text-[16px] font-semibold leading-tight tracking-[-0.01em];
 }
 .sh-brand small {
-  @apply block text-[10px] font-medium uppercase tracking-[.12em] text-white/55;
+  @apply block text-[10px] font-medium uppercase tracking-[.12em] text-ink/55;
 }
 .sh-condo {
   @apply hidden;
 }
 .sh-phone {
-  @apply border-l border-white/20 pl-5 text-[13px] text-white/80;
+  @apply border-l border-line pl-5 text-[13px] text-ink/70;
 }
 .sh-tools {
   @apply ml-auto flex items-center gap-4;
 }
 .sh-tools > button,
 .sh-tools > a {
-  @apply flex h-8 w-8 items-center justify-center text-white hover:text-white/70;
+  @apply flex h-8 w-8 items-center justify-center text-ink/70 hover:text-ink;
 }
 .sh-tools svg {
   @apply h-[18px] w-[18px];
@@ -85,7 +85,7 @@ body {
   @apply relative;
 }
 .sh-user > summary {
-  @apply flex h-8 cursor-pointer list-none items-center gap-2 rounded-[2px] border border-white/25 px-2.5 text-[12px] font-medium hover:bg-white/10;
+  @apply flex h-8 cursor-pointer list-none items-center gap-2 rounded-[2px] border border-line px-2.5 text-[12px] font-medium text-ink hover:bg-stripe;
 }
 .sh-user > summary::-webkit-details-marker {
   display: none;
@@ -106,9 +106,14 @@ body {
   @apply mt-3 flex items-center justify-between gap-2 border-t border-line pt-3;
 }
 
-/* Barra de menu: fica encostada à esquerda e termina em canto arredondado. */
+/* A logo é JPEG com fundo claro: a placa branca a mantém legível também no modo escuro. */
+.sh-logo {
+  @apply block rounded-[2px] bg-white;
+}
+
+/* Barra de menu. */
 .sh-nav {
-  @apply relative z-20 border-t border-white/10 bg-navy;
+  @apply relative z-20 bg-navy;
 }
 .sh-nav > ul {
   @apply mx-auto flex w-full max-w-[960px] items-stretch px-2.5;
@@ -415,7 +420,7 @@ body {
   @apply flex min-h-full flex-col bg-bg;
 }
 .sh-login-top {
-  @apply bg-navy;
+  @apply border-b border-line bg-card;
 }
 .sh-login-box {
   @apply mx-auto mt-16 w-full max-w-sm border border-line bg-card p-8;

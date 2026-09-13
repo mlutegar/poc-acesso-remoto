@@ -165,3 +165,17 @@ Nenhuma das 77 rotas segue como "não iniciada": 16 parciais (funcionam), 59 em 
 ## O que falta para as telas de equipamento saírem da prévia
 
 Não é só "ligar o aparelho". Precisa de: o modelo instalado em cada ponto de acesso e a documentação do fabricante; uma unidade de teste em bancada; e, principalmente, resolver a rede — o equipamento fica atrás do roteador do condomínio e um servidor na nuvem não o alcança, então será preciso um agente local dentro do condomínio, com fila de sincronização nos dois sentidos. O cadastro facial ainda exige consentimento e política de retenção, por ser dado sensível na LGPD.
+
+# Identidade Átrio e visual corporativo — 13/09/2026
+
+## Entregue
+
+- O produto passa a se chamar **Átrio**, com a logo em `public/logo-atrio.jpeg` (recortada das margens; o arquivo original está em `docs/marca/`). O nome aparece no título da aba, no cabeçalho, no login e na documentação. A chave do armazenamento local mudou para `atrio-operations-v1`, lendo a antiga uma vez para ninguém perder o que já cadastrou.
+- Paleta medida na própria logo: azul-marinho `#182838` (nome) e azul-aço `#405870` (o "A"). São os tokens `--c-navy` e `--c-blue`.
+- Barra de marca clara com a logo, menu escuro na cor da marca, ambos alinhados à mesma coluna de 960px do conteúdo. Menu plano com o item ativo sublinhado. Fonte IBM Plex Sans. Títulos, botões, abas, cabeçalhos de tabela e selos em caixa normal; caixa alta só no menu. Selos em contorno, botões sem gradiente, cantos de 2px.
+- A logo é JPEG com fundo claro; no modo escuro ela recebe uma placa branca para continuar legível.
+- Como só há uma marca, o seletor de marca some do login e do menu do usuário; fica o alternador claro/escuro.
+
+## O que não mudou
+
+Modelo, regras, gravação, telas e testes. Só CSS, identidade e o markup do cabeçalho. Build, lint e os 30 testes iguais.

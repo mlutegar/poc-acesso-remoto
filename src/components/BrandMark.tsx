@@ -6,9 +6,10 @@ export default function BrandMark({ size = 36 }: { size?: number }) {
   if (preset.logo) {
     return (
       <img
+        className="sh-logo"
         src={preset.logo}
         alt={`Logo ${preset.name}`}
-        style={{ height: size, width: "auto", display: "block" }}
+        style={{ height: size, width: "auto" }}
       />
     );
   }
