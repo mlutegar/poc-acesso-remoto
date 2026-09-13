@@ -1,72 +1,70 @@
 import { useState } from "react";
 import { Icon } from "../components/Icons";
-import { Photo } from "../components/Photo";
+import { Photo, PhotoField } from "../components/Photo";
 import { PAGE_SIZE, Feedback, Pagination, Tabs, useListParams } from "../operations/List";
 import { Empty, Field, Modal } from "../operations/UI";
 import { Check } from "../operations/UI";
 import { DependeDeEquipamento } from "./Hardware";
 import { AVISO, matches, type PreviewRow } from "./row";
 
-const COLUNAS = ["Câmera", "Servidor", "Canal", "Situação", "Ações"];
+const COLUNAS = ["Visitante", "Credencial", "Vínculo", "Validade", "Situação", "Ações"];
 
 const LINHAS: PreviewRow[] = [
   {
     tab: "active",
-    photo: "",
-    kind: "objeto",
-    main: ["Entrada social", "Exibida na portaria e na visita"],
-    cols: ["Servidor P2P 01", "Canal 1"],
-    badge: ["Online", "green"],
-    actions: ["Ver", "Editar", "Histórico"],
+    photo: "AC",
+    kind: "pessoa",
+    main: ["Aline Caldas", "Clínica Movimente"],
+    cols: ["Cartão temporário · V-0148", "Pré-autorização · 3 · 101", "Seg a sex, 09h às 11h30"],
+    badge: ["Ativa", "green"],
+    actions: ["Devolver", "Editar", "Histórico"],
   },
   {
     tab: "active",
-    photo: "",
-    kind: "objeto",
-    main: ["Garagem — entrada", "Exibida na portaria"],
-    cols: ["Servidor P2P 01", "Canal 2"],
-    badge: ["Online", "green"],
-    actions: ["Ver", "Editar", "Histórico"],
+    photo: "MT",
+    kind: "pessoa",
+    main: ["Murilo Tenório", "Professor de natação"],
+    cols: ["Cartão temporário · V-0151", "Pré-autorização · 2 · 101", "Ter e qui, 15h às 18h"],
+    badge: ["Ativa", "green"],
+    actions: ["Devolver", "Editar", "Histórico"],
   },
   {
     tab: "active",
-    photo: "",
-    kind: "objeto",
-    main: ["Garagem — saída", "Vinculada à cancela de saída"],
-    cols: ["Servidor P2P 01", "Canal 3"],
-    badge: ["Online", "green"],
-    actions: ["Ver", "Editar", "Histórico"],
+    photo: "NB",
+    kind: "pessoa",
+    main: ["Neide Barbosa", "Diarista"],
+    cols: ["Facial temporário", "Pré-autorização · 1 · 101", "Seg, qua e sex, 08h às 17h"],
+    badge: ["Ativa", "green"],
+    actions: ["Editar", "Histórico"],
   },
   {
     tab: "active",
-    photo: "",
-    kind: "objeto",
-    main: ["Hall do Bloco 1", "Somente administradores"],
-    cols: ["Servidor P2P 02", "Canal 1"],
-    badge: ["Online", "green"],
-    actions: ["Ver", "Editar", "Histórico"],
+    photo: "MD",
+    kind: "pessoa",
+    main: ["Marcelo Duarte", "Duarte Pinturas"],
+    cols: ["Cartão temporário · V-0155", "Visita em andamento · 3 · 201", "Somente hoje"],
+    badge: ["Ativa", "green"],
+    actions: ["Devolver", "Editar", "Histórico"],
   },
   {
     tab: "active",
-    photo: "",
-    kind: "objeto",
-    main: ["Portaria de serviço", "Sem prévia no aplicativo"],
-    cols: ["Servidor P2P 02", "Canal 2"],
-    badge: ["Offline", "red"],
-    actions: ["Ver", "Editar", "Histórico"],
+    main: ["Equipe Clean Predial", "Limpeza aos sábados"],
+    cols: ["Cartão temporário · V-0160", "Pré-autorização · 3 · 201", "Sábados, 08h às 14h"],
+    badge: ["Pendente", "amber"],
+    actions: ["Editar", "Histórico"],
   },
   {
     tab: "history",
-    photo: "",
-    kind: "objeto",
-    main: ["Playground", "Removida na reforma de 07/2026"],
-    cols: ["—", "—"],
-    badge: ["Inativa", "gray"],
+    photo: "JR",
+    kind: "pessoa",
+    main: ["Jonas Ribeiro", "Mercado Envios"],
+    cols: ["Cartão temporário · V-0142", "Visita finalizada · 1 · 101", "Devolvido em 12/09"],
+    badge: ["Devolvida", "gray"],
     actions: ["Histórico"],
   },
 ];
 
-export default function Cameras() {
+export default function CredenciaisVisitante() {
   const { query, tab, update, pageOf, goTo, clear } = useListParams();
   const [form, setForm] = useState(false);
   const [aviso, setAviso] = useState("");
@@ -77,14 +75,14 @@ export default function Cameras() {
   return (
     <main className="op-main">
       <div className="op-page-heading">
-        <h1>Câmeras</h1>
+        <h1>Credenciais de visitante</h1>
         <button className="op-button primary" onClick={() => setForm(true)}>
-          <Icon name="plus" /> Nova câmera
+          <Icon name="plus" /> Nova credencial
         </button>
       </div>
-      <DependeDeEquipamento acoes="Ver a imagem, gerar a URL e a prévia na visita" />
+      <DependeDeEquipamento acoes="Enviar a credencial ao equipamento e registrar a passagem" />
       <Feedback notice={aviso} error="" onDismiss={() => setAviso("")} />
-      <section className="op-panel" aria-label="Lista de câmeras">
+      <section className="op-panel" aria-label="Lista de credenciais de visitante">
         <div className="op-panel-top">
           <Tabs
             tab={tab}
@@ -97,10 +95,10 @@ export default function Cameras() {
           />
           <div className="op-actions">
             <button className="op-button small" onClick={inerte}>
-              Acionadores
+              Visitas
             </button>
             <button className="op-button small" onClick={inerte}>
-              Dispositivos
+              Pré-autorizações
             </button>
           </div>
         </div>
@@ -110,8 +108,8 @@ export default function Cameras() {
               <Icon name="search" />
             </span>
             <input
-              aria-label="Buscar em câmeras"
-              placeholder="Buscar câmera ou servidor…"
+              aria-label="Buscar em credenciais de visitante"
+              placeholder="Buscar visitante, serial ou unidade…"
               value={query}
               onChange={(e) => update("q", e.target.value)}
             />
@@ -172,7 +170,7 @@ export default function Cameras() {
         <Pagination total={visiveis.length} page={pagina} onGo={goTo} />
       </section>
       {form && (
-        <Modal title="Nova câmera" onClose={() => setForm(false)}>
+        <Modal title="Nova credencial de visitante" onClose={() => setForm(false)}>
           <form
             className="op-form"
             onSubmit={(e) => {
@@ -181,32 +179,24 @@ export default function Cameras() {
               setAviso("Esta prévia mostra os campos do cadastro, mas ainda não grava.");
             }}
           >
+            <PhotoField kind="pessoa" />
             <div className="op-form-grid">
-              <Field label="Nome" name="nome" />
-              <Field label="Servidor" name="servidor" />
-              <Field label="Canal" name="canal" />
-              <Field label="Marca" name="marca">
-                <option key="Intelbras">Intelbras</option>
-                <option key="Hikvision">Hikvision</option>
-                <option key="Dahua">Dahua</option>
-                <option key="Outra">Outra</option>
+              <Field label="Visitante" name="visitante" />
+              <Field label="Tipo" name="tipo">
+                <option key="Cartão temporário">Cartão temporário</option>
+                <option key="Facial temporário">Facial temporário</option>
+                <option key="TAG temporária">TAG temporária</option>
               </Field>
-              <Field label="IP ou DDNS" name="ip" />
-              <Field label="Porta" name="porta" />
-              <Field label="Usuário" name="usuario" />
-              <Field label="Senha" name="senha" type="password" />
-              <Field label="Acionador vinculado" name="acionador">
-                <option key="Nenhum">Nenhum</option>
-                <option key="Portão social">Portão social</option>
-                <option key="Portão da garagem">Portão da garagem</option>
-                <option key="Cancela de saída">Cancela de saída</option>
+              <Field label="Serial ou código" name="serial" />
+              <Field label="Vínculo" name="vinculo">
+                <option key="Visita">Visita</option>
+                <option key="Pré-autorização">Pré-autorização</option>
               </Field>
+              <Field label="Validade" name="validade" type="date" />
             </div>
 
             <div className="op-checks">
-              <Check label="Exibir na portaria" name="portaria" checked={false} />
-              <Check label="Exibir no aplicativo" name="app" checked={false} />
-              <Check label="Exibir na visita" name="visita" checked={false} />
+              <Check label="Devolução obrigatória na saída" name="devolucao" checked={false} />
             </div>
             <footer className="op-form-footer">
               <button type="button" className="op-button" onClick={() => setForm(false)}>

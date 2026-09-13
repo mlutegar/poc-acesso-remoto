@@ -1,4 +1,16 @@
-import type { Data, Issue, Log, Mail, Notice, Permit, Resident, Unit, Visit } from "./model";
+import type {
+  Bike,
+  Data,
+  Issue,
+  Log,
+  Mail,
+  Notice,
+  Permit,
+  Pet,
+  Resident,
+  Unit,
+  Visit,
+} from "./model";
 
 // Conjunto de demonstração: um condomínio fictício com movimento de um dia
 // comum de portaria. Serve para apresentar o produto sem usar dado real.
@@ -723,6 +735,114 @@ const buildNotices = (): Notice[] => [
   ),
 ];
 
+const pet = (
+  id: string,
+  unitId: string,
+  residentId: string,
+  name: string,
+  species: string,
+  extra: Partial<Pet> = {}
+): Pet => ({
+  id,
+  unitId,
+  residentId,
+  name,
+  species,
+  breed: "",
+  color: "",
+  size: "Médio",
+  notes: "",
+  active: true,
+  ...extra,
+});
+
+const bike = (
+  id: string,
+  unitId: string,
+  residentId: string,
+  brand: string,
+  code: string,
+  extra: Partial<Bike> = {}
+): Bike => ({
+  id,
+  unitId,
+  residentId,
+  brand,
+  model: "",
+  color: "",
+  code,
+  notes: "",
+  active: true,
+  ...extra,
+});
+
+const buildPets = (): Pet[] => [
+  pet("a-01", "u-1-101", "r-01", "Nina", "Cão", {
+    breed: "Golden retriever",
+    color: "Dourado",
+    size: "Grande",
+    notes: "Sai sempre com guia. Dócil com as crianças.",
+  }),
+  pet("a-02", "u-2-102", "r-10", "Tom", "Gato", {
+    breed: "Siamês",
+    color: "Bege",
+    size: "Pequeno",
+    notes: "Já saiu sozinho pela garagem uma vez.",
+  }),
+  pet("a-03", "u-3-201", "r-20", "Jack", "Cão", {
+    breed: "Beagle",
+    color: "Tricolor",
+  }),
+  pet("a-04", "u-2-201", "", "Mel", "Cão", {
+    breed: "Sem raça definida",
+    color: "Caramelo",
+    notes: "Cadastro sem condômino vinculado.",
+  }),
+  pet("a-05", "u-1-202", "r-06", "Kiwi", "Ave", {
+    breed: "Calopsita",
+    color: "Cinza e amarelo",
+    size: "Pequeno",
+  }),
+  pet("a-06", "u-1-102", "", "Bidu", "Cão", {
+    breed: "Poodle",
+    color: "Branco",
+    size: "Pequeno",
+    notes: "Saiu com o antigo inquilino em 05/2026.",
+    active: false,
+  }),
+];
+
+const buildBikes = (): Bike[] => [
+  bike("b-01", "u-1-101", "r-02", "Caloi", "BIC-014", {
+    model: "Elite Carbon",
+    color: "Preta e vermelha",
+    notes: "Vaga 14 do bicicletário.",
+  }),
+  bike("b-02", "u-2-101", "r-08", "Sense", "BIC-021", {
+    model: "Rock Evo",
+    color: "Verde",
+  }),
+  bike("b-03", "u-3-102", "r-18", "Specialized", "BIC-032", {
+    model: "Rockhopper",
+    color: "Azul",
+  }),
+  bike("b-04", "u-1-201", "r-05", "Nathor", "BIC-035", {
+    model: "Aro 20 infantil",
+    color: "Rosa",
+    notes: "Bicicleta infantil.",
+  }),
+  bike("b-05", "u-2-202", "r-14", "Oggi", "BIC-041", {
+    model: "Big Wheel",
+    color: "Grafite",
+  }),
+  bike("b-06", "u-3-201", "r-19", "Monark", "BIC-008", {
+    model: "Barra Circular",
+    color: "Vermelha",
+    notes: "Retirada do bicicletário em 06/2026.",
+    active: false,
+  }),
+];
+
 const log = (
   id: string,
   entityId: string,
@@ -817,7 +937,7 @@ const buildLogs = (): Log[] => [
 /** Condomínio fictício com movimento de portaria, para demonstração. */
 export function demoData(): Data {
   return {
-    version: 2,
+    version: 3,
     revision: 0,
     units: buildUnits(),
     residents: buildResidents(),
@@ -826,6 +946,8 @@ export function demoData(): Data {
     mail: buildMails(),
     issues: buildIssues(),
     notices: buildNotices(),
+    pets: buildPets(),
+    bikes: buildBikes(),
     logs: buildLogs(),
   };
 }

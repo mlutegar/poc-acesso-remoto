@@ -3,6 +3,7 @@ import { Icon } from "../components/Icons";
 import { Photo } from "../components/Photo";
 import { PAGE_SIZE, Feedback, Pagination, Tabs, useListParams } from "../operations/List";
 import { Empty } from "../operations/UI";
+import { DependeDeEquipamento } from "./Hardware";
 import { AVISO, matches, type PreviewRow } from "./row";
 
 const COLUNAS = ["Ligação", "Atendente", "Data", "Duração", "Situação"];
@@ -55,6 +56,7 @@ export default function Ligacoes() {
           <Icon name="plus" /> Exportar
         </button>
       </div>
+      <DependeDeEquipamento acoes="O registro das chamadas, que vem da central de interfone" />
       <Feedback notice={aviso} error="" onDismiss={() => setAviso("")} />
       <section className="op-panel" aria-label="Lista de ligações">
         <div className="op-panel-top">

@@ -138,3 +138,30 @@ Nada foi copiado do sistema de referência. Nomes, endereços, telefones, placas
 ## Limites
 
 As prévias mostram dados fixos escritos no próprio arquivo: busca e abas filtram essas linhas, mas nada é gravado, e os números não conversam com os módulos que funcionam. O design é o mesmo das telas prontas, então refinar a aparência depois vale para todas de uma vez.
+
+# Equipamentos, animais e bicicletas — 13/09/2026
+
+## Entregue
+
+- **Animais e Bicicletas funcionando de verdade** (`/animais`, `/bicicletas`): cadastro vinculado à residência e, opcionalmente, a um condômino dela, com busca, filtro, exportação, histórico e gravação. O código do bicicletário não se repete entre bicicletas ativas, e o responsável precisa ser condômino ativo da mesma residência. Não dependiam de equipamento — estavam na lista de pendências só por não terem sido feitas.
+- **Seis telas novas de prévia**: Rotas, Dispositivos, Gatilhos, Credenciais de morador, Credenciais de visitante e Relatório de acessos. Com elas, todo item do menu passou a ter tela: nenhuma rota do mapa continua sem nada.
+- **Aviso explícito de equipamento** (`src/preview/Hardware.tsx`) em **11 telas**: as cinco acima que dependem de equipamento, mais Acionadores, Câmeras, Bio/RFID, Ligações e Fila SIP. A faixa diz o que já está pronto e o que passa a funcionar quando o equipamento for conectado — é informação para a apresentação, não pedido de desculpas.
+- A tela de dispositivos que vinha do protótipo inicial, com dados fixos, foi substituída por essa prévia.
+
+## Migração para a versão 3
+
+Animais e bicicletas são coleções novas no arquivo local. Quem já tinha dados gravados sobe de `version: 2` para `3` sem perder nada, e quem ainda estava na `1` sobe direto para a `3`. Há teste para os dois caminhos.
+
+## Verificação
+
+- `npm test`: 30 testes (5 novos), cobrindo as regras de animal e bicicleta, o responsável de outra residência, o código duplicado, as duas migrações e a coerência dos dados de demonstração.
+- `npm run build` e `npx eslint` sem erros.
+- Pelo navegador: a faixa de equipamento aparece nas telas certas; cadastrar um animal com responsável de outra residência é recusado com a mensagem correta e, corrigido o responsável, grava e aparece na lista; bicicleta com código repetido é recusada. O arquivo local subiu para a versão 3 mantendo os cadastros.
+
+## Cobertura
+
+Nenhuma das 77 rotas segue como "não iniciada": 16 parciais (funcionam), 59 em prévia — das quais 19 dependem de equipamento e trazem o aviso na tela — e 2 simuladas.
+
+## O que falta para as telas de equipamento saírem da prévia
+
+Não é só "ligar o aparelho". Precisa de: o modelo instalado em cada ponto de acesso e a documentação do fabricante; uma unidade de teste em bancada; e, principalmente, resolver a rede — o equipamento fica atrás do roteador do condomínio e um servidor na nuvem não o alcança, então será preciso um agente local dentro do condomínio, com fila de sincronização nos dois sentidos. O cadastro facial ainda exige consentimento e política de retenção, por ser dado sensível na LGPD.

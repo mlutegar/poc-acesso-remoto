@@ -541,3 +541,17 @@ body {
 .sh-photo-actions {
   @apply flex gap-1;
 }
+
+/* Aviso das telas que dependem de equipamento conectado. */
+.sh-hardware {
+  @apply mb-3 mt-1 flex items-start gap-3 rounded border border-warning/40 bg-warning/10 px-3 py-2;
+}
+.sh-hardware svg {
+  @apply mt-0.5 h-5 w-5 shrink-0 text-warning;
+}
+.sh-hardware strong {
+  @apply block text-[13px] font-bold text-warning;
+}
+.sh-hardware span {
+  @apply block text-[12px] leading-5 text-ink/70;
+}

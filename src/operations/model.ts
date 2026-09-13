@@ -115,6 +115,29 @@ export interface Notice {
   finished: boolean;
   createdAt: string;
 }
+export interface Pet {
+  id: string;
+  unitId: string;
+  residentId: string;
+  name: string;
+  species: string;
+  breed: string;
+  color: string;
+  size: string;
+  notes: string;
+  active: boolean;
+}
+export interface Bike {
+  id: string;
+  unitId: string;
+  residentId: string;
+  brand: string;
+  model: string;
+  color: string;
+  code: string;
+  notes: string;
+  active: boolean;
+}
 export interface Log {
   id: string;
   entityId: string;
@@ -123,7 +146,7 @@ export interface Log {
   message: string;
 }
 export interface Data {
-  version: 2;
+  version: 3;
   revision: number;
   units: Unit[];
   residents: Resident[];
@@ -132,12 +155,14 @@ export interface Data {
   mail: Mail[];
   issues: Issue[];
   notices: Notice[];
+  pets: Pet[];
+  bikes: Bike[];
   logs: Log[];
 }
 // Cadastros atendidos pelo formulário genérico do bloco 1.
 export type CoreCollection = "units" | "residents" | "permits" | "visits";
-export type Collection = CoreCollection | "mail" | "issues" | "notices";
-export type Entity = Unit | Resident | Permit | Visit | Mail | Issue | Notice;
+export type Collection = CoreCollection | "mail" | "issues" | "notices" | "pets" | "bikes";
+export type Entity = Unit | Resident | Permit | Visit | Mail | Issue | Notice | Pet | Bike;
 export const normalize = (s: string) =>
   s
     .normalize("NFD")
@@ -237,6 +262,15 @@ function responsible(data: Data, id: string) {
   if (!r?.active || !data.units.some((u) => u.id === r.unitId && u.active))
     throw new Error("Selecione um condômino ativo de uma residência ativa.");
 }
+// Animais e bicicletas pertencem a uma residência e, opcionalmente, a um condômino dela.
+function belongs(data: Data, unitId: string, residentId: string, active: boolean) {
+  if (!data.units.some((u) => u.id === unitId && (u.active || !active)))
+    throw new Error("Selecione uma residência ativa.");
+  if (!residentId) return;
+  const r = data.residents.find((x) => x.id === residentId);
+  if (!r || r.unitId !== unitId || (active && !r.active))
+    throw new Error("Selecione um condômino ativo da mesma residência.");
+}
 export function validate(data: Data, collection: Collection, item: Entity) {
   if (collection === "units") {
     const u = item as Unit;
@@ -335,7 +369,7 @@ export function validate(data: Data, collection: Collection, item: Entity) {
     if (i.residentId) responsible(data, i.residentId);
     if (i.pinned && i.status === "encerrada")
       throw new Error("Uma ocorrência encerrada não pode ficar fixada.");
-  } else {
+  } else if (collection === "notices") {
     const n = item as Notice;
     if (!n.subject.trim() || !n.body.trim()) throw new Error("Preencha o assunto e o texto.");
     if (n.audience === "unidade" && !data.units.some((u) => u.id === n.unitId && u.active))
@@ -352,6 +386,19 @@ export function validate(data: Data, collection: Collection, item: Entity) {
     }
     if (!recipients(data, n).length)
       throw new Error("Nenhum condômino ativo corresponde a esse destino.");
+  } else if (collection === "pets") {
+    const a = item as Pet;
+    if (!a.name.trim() || !a.species.trim()) throw new Error("Preencha o nome e a espécie.");
+    belongs(data, a.unitId, a.residentId, a.active);
+  } else {
+    const b = item as Bike;
+    if (!b.brand.trim() || !b.color.trim()) throw new Error("Preencha a marca e a cor.");
+    belongs(data, b.unitId, b.residentId, b.active);
+    if (
+      identity(b.code) &&
+      data.bikes.some((x) => x.id !== b.id && x.active && identity(x.code) === identity(b.code))
+    )
+      throw new Error("Já existe uma bicicleta ativa com esse código.");
   }
 }
 export function transition(
@@ -486,7 +533,7 @@ export function noticeTransition(
 }
 export function seed(): Data {
   return {
-    version: 2,
+    version: 3,
     revision: 0,
     units: [
       {
@@ -549,6 +596,8 @@ export function seed(): Data {
     mail: [],
     issues: [],
     notices: [],
+    pets: [],
+    bikes: [],
     logs: [],
   };
 }
@@ -556,7 +605,7 @@ export function seed(): Data {
 export function isData(value: unknown): value is Data {
   if (!value || typeof value !== "object") return false;
   const d = value as Data;
-  if (d.version !== 2 || !Number.isSafeInteger(d.revision) || d.revision < 0) return false;
+  if (d.version !== 3 || !Number.isSafeInteger(d.revision) || d.revision < 0) return false;
   const shapes: Record<string, Record<string, string>> = {
     units: {
       id: "string",
@@ -662,6 +711,29 @@ export function isData(value: unknown): value is Data {
       finished: "boolean",
       createdAt: "string",
     },
+    pets: {
+      id: "string",
+      unitId: "string",
+      residentId: "string",
+      name: "string",
+      species: "string",
+      breed: "string",
+      color: "string",
+      size: "string",
+      notes: "string",
+      active: "boolean",
+    },
+    bikes: {
+      id: "string",
+      unitId: "string",
+      residentId: "string",
+      brand: "string",
+      model: "string",
+      color: "string",
+      code: "string",
+      notes: "string",
+      active: "boolean",
+    },
     logs: { id: "string", entityId: "string", at: "string", actor: "string", message: "string" },
   };
   for (const [key, shape] of Object.entries(shapes)) {
@@ -702,16 +774,23 @@ export function isData(value: unknown): value is Data {
       d.residents.some((r) => r.id === x.residentId)
     ) &&
     d.issues.every((i) => !i.residentId || d.residents.some((r) => r.id === i.residentId)) &&
-    d.notices.every((n) => n.audience !== "unidade" || d.units.some((u) => u.id === n.unitId))
+    d.notices.every((n) => n.audience !== "unidade" || d.units.some((u) => u.id === n.unitId)) &&
+    [...d.pets, ...d.bikes].every(
+      (x) =>
+        d.units.some((u) => u.id === x.unitId) &&
+        (!x.residentId || d.residents.some((r) => r.id === x.residentId && r.unitId === x.unitId))
+    )
   );
 }
 // Lê o formato gravado antes do bloco 2 sem descartar os cadastros existentes.
 export function migrate(value: unknown): Data | null {
   if (!value || typeof value !== "object") return null;
-  const raw = value as Record<string, unknown>;
+  const raw = { ...(value as Record<string, unknown>) };
   if (raw.version === 1) {
-    const upgraded = { ...raw, version: 2, mail: [], issues: [], notices: [] };
-    return isData(upgraded) ? upgraded : null;
+    Object.assign(raw, { version: 2, mail: [], issues: [], notices: [] });
   }
-  return isData(value) ? value : null;
+  if (raw.version === 2) {
+    Object.assign(raw, { version: 3, pets: [], bikes: [] });
+  }
+  return isData(raw) ? (raw as unknown as Data) : null;
 }

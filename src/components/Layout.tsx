@@ -26,7 +26,7 @@ export const MENU: MenuItem[] = [
         label: "Relatórios",
         children: [
           { label: "Painel Operacional", to: "/operacao" },
-          { label: "Acessos", to: "/eventos" },
+          { label: "Acessos", to: "/relatorios/acessos" },
           { label: "Visitas", to: "/relatorios/visitas" },
           { label: "Correspondências", to: "/relatorios/correspondencias" },
           { label: "Pré-Autorização", to: "/pre-autorizacoes" },
@@ -54,6 +54,8 @@ export const MENU: MenuItem[] = [
           { label: "Fornecedores", to: "/fornecedores" },
           { label: "Procedimentos", to: "/procedimentos" },
           { label: "Turnos", to: "/turnos" },
+          { label: "Animais", to: "/animais" },
+          { label: "Bicicletas", to: "/bicicletas" },
         ],
       },
       {
@@ -62,6 +64,10 @@ export const MENU: MenuItem[] = [
           { label: "Acionadores", to: "/acionadores" },
           { label: "Câmeras", to: "/cameras" },
           { label: "Dispositivos", to: "/dispositivos" },
+          { label: "Rotas", to: "/rotas" },
+          { label: "Gatilhos", to: "/gatilhos" },
+          { label: "Credenciais de morador", to: "/credenciais" },
+          { label: "Credenciais de visitante", to: "/credenciais-visitante" },
           { label: "Condomínio", to: "/condominio" },
         ],
       },

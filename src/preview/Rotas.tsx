@@ -7,66 +7,54 @@ import { Check } from "../operations/UI";
 import { DependeDeEquipamento } from "./Hardware";
 import { AVISO, matches, type PreviewRow } from "./row";
 
-const COLUNAS = ["Câmera", "Servidor", "Canal", "Situação", "Ações"];
+const COLUNAS = ["Rota", "Dispositivos", "Perfil", "Situação", "Ações"];
 
 const LINHAS: PreviewRow[] = [
   {
     tab: "active",
-    photo: "",
-    kind: "objeto",
-    main: ["Entrada social", "Exibida na portaria e na visita"],
-    cols: ["Servidor P2P 01", "Canal 1"],
-    badge: ["Online", "green"],
-    actions: ["Ver", "Editar", "Histórico"],
+    main: ["Entrada social", "Pedestres pela portaria"],
+    cols: ["Facial Entrada Social · Leitora Serviço", "Todos"],
+    badge: ["Ativa", "green"],
+    actions: ["Editar", "Histórico"],
   },
   {
     tab: "active",
-    photo: "",
-    kind: "objeto",
-    main: ["Garagem — entrada", "Exibida na portaria"],
-    cols: ["Servidor P2P 01", "Canal 2"],
-    badge: ["Online", "green"],
-    actions: ["Ver", "Editar", "Histórico"],
+    main: ["Entrada e saída de veículos", "Moradores com TAG"],
+    cols: ["Leitora Garagem · Cancela de Saída", "Condôminos"],
+    badge: ["Ativa", "green"],
+    actions: ["Editar", "Histórico"],
   },
   {
     tab: "active",
-    photo: "",
-    kind: "objeto",
-    main: ["Garagem — saída", "Vinculada à cancela de saída"],
-    cols: ["Servidor P2P 01", "Canal 3"],
-    badge: ["Online", "green"],
-    actions: ["Ver", "Editar", "Histórico"],
+    main: ["Visitante pedestre", "Liberada pela portaria a cada visita"],
+    cols: ["Facial Entrada Social", "Visitas"],
+    badge: ["Ativa", "green"],
+    actions: ["Editar", "Histórico"],
   },
   {
     tab: "active",
-    photo: "",
-    kind: "objeto",
-    main: ["Hall do Bloco 1", "Somente administradores"],
-    cols: ["Servidor P2P 02", "Canal 1"],
-    badge: ["Online", "green"],
-    actions: ["Ver", "Editar", "Histórico"],
+    main: ["Visitante veicular", "Somente com pré-autorização válida"],
+    cols: ["Leitora Garagem", "Pré-autorizados"],
+    badge: ["Ativa", "green"],
+    actions: ["Editar", "Histórico"],
   },
   {
     tab: "active",
-    photo: "",
-    kind: "objeto",
-    main: ["Portaria de serviço", "Sem prévia no aplicativo"],
-    cols: ["Servidor P2P 02", "Canal 2"],
-    badge: ["Offline", "red"],
-    actions: ["Ver", "Editar", "Histórico"],
+    main: ["Prestadores de serviço", "Entrada de serviço, das 7h às 18h"],
+    cols: ["Leitora Serviço", "Pré-autorizados"],
+    badge: ["Ativa", "green"],
+    actions: ["Editar", "Histórico"],
   },
   {
     tab: "history",
-    photo: "",
-    kind: "objeto",
-    main: ["Playground", "Removida na reforma de 07/2026"],
+    main: ["Portaria antiga do Bloco 3", "Desativada após a reforma"],
     cols: ["—", "—"],
     badge: ["Inativa", "gray"],
     actions: ["Histórico"],
   },
 ];
 
-export default function Cameras() {
+export default function Rotas() {
   const { query, tab, update, pageOf, goTo, clear } = useListParams();
   const [form, setForm] = useState(false);
   const [aviso, setAviso] = useState("");
@@ -77,14 +65,14 @@ export default function Cameras() {
   return (
     <main className="op-main">
       <div className="op-page-heading">
-        <h1>Câmeras</h1>
+        <h1>Rotas</h1>
         <button className="op-button primary" onClick={() => setForm(true)}>
-          <Icon name="plus" /> Nova câmera
+          <Icon name="plus" /> Nova rota
         </button>
       </div>
-      <DependeDeEquipamento acoes="Ver a imagem, gerar a URL e a prévia na visita" />
+      <DependeDeEquipamento acoes="Vincular a rota ao equipamento e liberar a passagem" />
       <Feedback notice={aviso} error="" onDismiss={() => setAviso("")} />
-      <section className="op-panel" aria-label="Lista de câmeras">
+      <section className="op-panel" aria-label="Lista de rotas">
         <div className="op-panel-top">
           <Tabs
             tab={tab}
@@ -97,10 +85,10 @@ export default function Cameras() {
           />
           <div className="op-actions">
             <button className="op-button small" onClick={inerte}>
-              Acionadores
+              Dispositivos
             </button>
             <button className="op-button small" onClick={inerte}>
-              Dispositivos
+              Acionadores
             </button>
           </div>
         </div>
@@ -110,8 +98,8 @@ export default function Cameras() {
               <Icon name="search" />
             </span>
             <input
-              aria-label="Buscar em câmeras"
-              placeholder="Buscar câmera ou servidor…"
+              aria-label="Buscar em rotas"
+              placeholder="Buscar rota ou dispositivo…"
               value={query}
               onChange={(e) => update("q", e.target.value)}
             />
@@ -172,7 +160,7 @@ export default function Cameras() {
         <Pagination total={visiveis.length} page={pagina} onGo={goTo} />
       </section>
       {form && (
-        <Modal title="Nova câmera" onClose={() => setForm(false)}>
+        <Modal title="Nova rota" onClose={() => setForm(false)}>
           <form
             className="op-form"
             onSubmit={(e) => {
@@ -183,30 +171,17 @@ export default function Cameras() {
           >
             <div className="op-form-grid">
               <Field label="Nome" name="nome" />
-              <Field label="Servidor" name="servidor" />
-              <Field label="Canal" name="canal" />
-              <Field label="Marca" name="marca">
-                <option key="Intelbras">Intelbras</option>
-                <option key="Hikvision">Hikvision</option>
-                <option key="Dahua">Dahua</option>
-                <option key="Outra">Outra</option>
+              <Field label="Perfil" name="perfil">
+                <option key="Todos">Todos</option>
+                <option key="Condôminos">Condôminos</option>
+                <option key="Pré-autorizados">Pré-autorizados</option>
+                <option key="Visitas">Visitas</option>
               </Field>
-              <Field label="IP ou DDNS" name="ip" />
-              <Field label="Porta" name="porta" />
-              <Field label="Usuário" name="usuario" />
-              <Field label="Senha" name="senha" type="password" />
-              <Field label="Acionador vinculado" name="acionador">
-                <option key="Nenhum">Nenhum</option>
-                <option key="Portão social">Portão social</option>
-                <option key="Portão da garagem">Portão da garagem</option>
-                <option key="Cancela de saída">Cancela de saída</option>
-              </Field>
+              <Field label="Dispositivos" name="dispositivos" />
             </div>
-
+            <Field label="Observação" name="observacao" type="textarea" />
             <div className="op-checks">
-              <Check label="Exibir na portaria" name="portaria" checked={false} />
-              <Check label="Exibir no aplicativo" name="app" checked={false} />
-              <Check label="Exibir na visita" name="visita" checked={false} />
+              <Check label="Ativa" name="ativa" checked={false} />
             </div>
             <footer className="op-form-footer">
               <button type="button" className="op-button" onClick={() => setForm(false)}>

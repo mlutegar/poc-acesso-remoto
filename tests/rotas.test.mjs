@@ -14,15 +14,18 @@ test("todo item do menu tem uma tela", () => {
   assert.deepEqual(semTela, [], `itens de menu sem rota: ${semTela.join(", ")}`);
 });
 
+const ehPagina = (f) =>
+  f.endsWith(".tsx") && readFileSync(`src/preview/${f}`, "utf8").includes("export default function");
+
 test("toda tela de prévia está ligada a uma rota", () => {
-  const telas = readdirSync("src/preview").filter((f) => f.endsWith(".tsx"));
+  const telas = readdirSync("src/preview").filter(ehPagina);
   const orfas = telas.filter((f) => !app.includes(`./preview/${f.replace(".tsx", "")}`));
   assert.deepEqual(orfas, [], `telas não roteadas: ${orfas.join(", ")}`);
-  assert.ok(telas.length >= 26, `esperava ao menos 26 telas, encontrei ${telas.length}`);
+  assert.ok(telas.length >= 31, `esperava ao menos 26 telas, encontrei ${telas.length}`);
 });
 
 test("nenhuma prévia finge gravar em silêncio", () => {
-  for (const f of readdirSync("src/preview").filter((f) => f.endsWith(".tsx"))) {
+  for (const f of readdirSync("src/preview").filter(ehPagina)) {
     const src = readFileSync(`src/preview/${f}`, "utf8");
     if (!src.includes("<form")) continue;
     assert.ok(

@@ -7,66 +7,54 @@ import { Check } from "../operations/UI";
 import { DependeDeEquipamento } from "./Hardware";
 import { AVISO, matches, type PreviewRow } from "./row";
 
-const COLUNAS = ["Câmera", "Servidor", "Canal", "Situação", "Ações"];
+const COLUNAS = ["Dispositivo", "Endereço", "Último acesso", "Situação", "Ações"];
 
 const LINHAS: PreviewRow[] = [
   {
     tab: "active",
-    photo: "",
-    kind: "objeto",
-    main: ["Entrada social", "Exibida na portaria e na visita"],
-    cols: ["Servidor P2P 01", "Canal 1"],
+    main: ["Facial Entrada Social", "ControlID Face · MAC 00:1B:44:11:3A:B7"],
+    cols: ["192.168.10.21:8080", "13/09 09:31"],
     badge: ["Online", "green"],
-    actions: ["Ver", "Editar", "Histórico"],
+    actions: ["Sincronizar", "Reiniciar", "Editar", "Histórico"],
   },
   {
     tab: "active",
-    photo: "",
-    kind: "objeto",
-    main: ["Garagem — entrada", "Exibida na portaria"],
-    cols: ["Servidor P2P 01", "Canal 2"],
+    main: ["Leitora Garagem", "Controladora veicular · MAC 00:1B:44:11:3A:C2"],
+    cols: ["192.168.10.22:8080", "13/09 09:28"],
     badge: ["Online", "green"],
-    actions: ["Ver", "Editar", "Histórico"],
+    actions: ["Sincronizar", "Reiniciar", "Editar", "Histórico"],
   },
   {
     tab: "active",
-    photo: "",
-    kind: "objeto",
-    main: ["Garagem — saída", "Vinculada à cancela de saída"],
-    cols: ["Servidor P2P 01", "Canal 3"],
+    main: ["Cancela de Saída", "Controladora veicular · MAC 00:1B:44:11:3A:C9"],
+    cols: ["192.168.10.23:8080", "13/09 09:05"],
     badge: ["Online", "green"],
-    actions: ["Ver", "Editar", "Histórico"],
+    actions: ["Sincronizar", "Reiniciar", "Editar", "Histórico"],
   },
   {
     tab: "active",
-    photo: "",
-    kind: "objeto",
-    main: ["Hall do Bloco 1", "Somente administradores"],
-    cols: ["Servidor P2P 02", "Canal 1"],
-    badge: ["Online", "green"],
-    actions: ["Ver", "Editar", "Histórico"],
-  },
-  {
-    tab: "active",
-    photo: "",
-    kind: "objeto",
-    main: ["Portaria de serviço", "Sem prévia no aplicativo"],
-    cols: ["Servidor P2P 02", "Canal 2"],
+    main: ["Leitora Serviço", "Leitora de proximidade · MAC 00:1B:44:11:3A:D4"],
+    cols: ["192.168.10.24:8080", "12/09 18:40"],
     badge: ["Offline", "red"],
-    actions: ["Ver", "Editar", "Histórico"],
+    actions: ["Sincronizar", "Reiniciar", "Editar", "Histórico"],
+  },
+  {
+    tab: "active",
+    main: ["Servidor de câmeras P2P", "Concentrador de vídeo"],
+    cols: ["192.168.10.30:9000", "13/09 09:30"],
+    badge: ["Online", "green"],
+    actions: ["Reiniciar", "Editar", "Histórico"],
   },
   {
     tab: "history",
-    photo: "",
-    kind: "objeto",
-    main: ["Playground", "Removida na reforma de 07/2026"],
+    main: ["Leitora Bloco 3", "Removida na reforma de 07/2026"],
     cols: ["—", "—"],
-    badge: ["Inativa", "gray"],
+    badge: ["Removido", "gray"],
     actions: ["Histórico"],
   },
 ];
 
-export default function Cameras() {
+export default function Dispositivos() {
   const { query, tab, update, pageOf, goTo, clear } = useListParams();
   const [form, setForm] = useState(false);
   const [aviso, setAviso] = useState("");
@@ -77,30 +65,33 @@ export default function Cameras() {
   return (
     <main className="op-main">
       <div className="op-page-heading">
-        <h1>Câmeras</h1>
+        <h1>Dispositivos</h1>
         <button className="op-button primary" onClick={() => setForm(true)}>
-          <Icon name="plus" /> Nova câmera
+          <Icon name="plus" /> Novo dispositivo
         </button>
       </div>
-      <DependeDeEquipamento acoes="Ver a imagem, gerar a URL e a prévia na visita" />
+      <DependeDeEquipamento acoes="Sincronizar, reiniciar e o indicador de online" />
       <Feedback notice={aviso} error="" onDismiss={() => setAviso("")} />
-      <section className="op-panel" aria-label="Lista de câmeras">
+      <section className="op-panel" aria-label="Lista de dispositivos">
         <div className="op-panel-top">
           <Tabs
             tab={tab}
             options={[
-              ["active", "Ativas"],
+              ["active", "Ativos"],
               ["history", "Histórico"],
-              ["all", "Todas"],
+              ["all", "Todos"],
             ]}
             onSelect={(v) => update("tab", v)}
           />
           <div className="op-actions">
             <button className="op-button small" onClick={inerte}>
-              Acionadores
+              Sincronizar todos
             </button>
             <button className="op-button small" onClick={inerte}>
-              Dispositivos
+              Rotas
+            </button>
+            <button className="op-button small" onClick={inerte}>
+              Acionadores
             </button>
           </div>
         </div>
@@ -110,8 +101,8 @@ export default function Cameras() {
               <Icon name="search" />
             </span>
             <input
-              aria-label="Buscar em câmeras"
-              placeholder="Buscar câmera ou servidor…"
+              aria-label="Buscar em dispositivos"
+              placeholder="Buscar nome, MAC ou endereço…"
               value={query}
               onChange={(e) => update("q", e.target.value)}
             />
@@ -172,7 +163,7 @@ export default function Cameras() {
         <Pagination total={visiveis.length} page={pagina} onGo={goTo} />
       </section>
       {form && (
-        <Modal title="Nova câmera" onClose={() => setForm(false)}>
+        <Modal title="Novo dispositivo" onClose={() => setForm(false)}>
           <form
             className="op-form"
             onSubmit={(e) => {
@@ -183,30 +174,26 @@ export default function Cameras() {
           >
             <div className="op-form-grid">
               <Field label="Nome" name="nome" />
-              <Field label="Servidor" name="servidor" />
-              <Field label="Canal" name="canal" />
-              <Field label="Marca" name="marca">
-                <option key="Intelbras">Intelbras</option>
-                <option key="Hikvision">Hikvision</option>
-                <option key="Dahua">Dahua</option>
-                <option key="Outra">Outra</option>
+              <Field label="Tipo" name="tipo">
+                <option key="Facial">Facial</option>
+                <option key="Leitora de proximidade">Leitora de proximidade</option>
+                <option key="Controladora veicular">Controladora veicular</option>
+                <option key="Concentrador de vídeo">Concentrador de vídeo</option>
               </Field>
+              <Field label="Fabricante" name="fabricante" />
+              <Field label="MAC" name="mac" />
               <Field label="IP ou DDNS" name="ip" />
               <Field label="Porta" name="porta" />
-              <Field label="Usuário" name="usuario" />
-              <Field label="Senha" name="senha" type="password" />
-              <Field label="Acionador vinculado" name="acionador">
-                <option key="Nenhum">Nenhum</option>
-                <option key="Portão social">Portão social</option>
-                <option key="Portão da garagem">Portão da garagem</option>
-                <option key="Cancela de saída">Cancela de saída</option>
+              <Field label="Rota" name="rota">
+                <option key="Entrada social">Entrada social</option>
+                <option key="Entrada e saída de veículos">Entrada e saída de veículos</option>
+                <option key="Prestadores de serviço">Prestadores de serviço</option>
               </Field>
             </div>
 
             <div className="op-checks">
-              <Check label="Exibir na portaria" name="portaria" checked={false} />
-              <Check label="Exibir no aplicativo" name="app" checked={false} />
-              <Check label="Exibir na visita" name="visita" checked={false} />
+              <Check label="Ativo" name="ativo" checked={false} />
+              <Check label="Sincronizar automaticamente" name="sync" checked={false} />
             </div>
             <footer className="op-form-footer">
               <button type="button" className="op-button" onClick={() => setForm(false)}>

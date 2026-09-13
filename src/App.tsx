@@ -9,7 +9,14 @@ import MailPage from "./operations/Mail";
 import Issues from "./operations/Issues";
 import Notices from "./operations/Notices";
 import Veiculos from "./pages/Veiculos";
-import Dispositivos from "./pages/Dispositivos";
+import Pets from "./operations/Pets";
+import Bikes from "./operations/Bikes";
+import Rotas from "./preview/Rotas";
+import Dispositivos from "./preview/Dispositivos";
+import Gatilhos from "./preview/Gatilhos";
+import Credenciais from "./preview/Credenciais";
+import CredenciaisVisitante from "./preview/CredenciaisVisitante";
+import RelatorioAcessos from "./preview/RelatorioAcessos";
 import Usuarios from "./preview/Usuarios";
 import Funcionarios from "./preview/Funcionarios";
 import Enquetes from "./preview/Enquetes";
@@ -61,6 +68,13 @@ export default function App() {
         <Route path="/pessoas" element={<Navigate to="/condominos" replace />} />
         <Route path="/veiculos" element={<Veiculos />} />
         <Route path="/dispositivos" element={<Dispositivos />} />
+        <Route path="/animais" element={<Pets />} />
+        <Route path="/bicicletas" element={<Bikes />} />
+        <Route path="/rotas" element={<Rotas />} />
+        <Route path="/gatilhos" element={<Gatilhos />} />
+        <Route path="/credenciais" element={<Credenciais />} />
+        <Route path="/credenciais-visitante" element={<CredenciaisVisitante />} />
+        <Route path="/relatorios/acessos" element={<RelatorioAcessos />} />
         <Route path="/usuarios" element={<Usuarios />} />
         <Route path="/funcionarios" element={<Funcionarios />} />
         <Route path="/enquetes" element={<Enquetes />} />

@@ -17,6 +17,7 @@ const paths = {
   chevron: "M6 9l6 6 6-6",
   camera: "M4 8h3l1.5-2h7L17 8h3v11H4V8Zm8 8.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z",
   box: "M3 8.5 12 4l9 4.5V17L12 21l-9-4L3 8.5Zm0 0 9 4.5m0 0 9-4.5m-9 4.5V21",
+  chip: "M8 8h8v8H8V8ZM4 9h1m-1 3h1m-1 3h1m14-6h1m-1 3h1m-1 3h1M9 4v1m3-1v1m3-1v1M9 19v1m3-1v1m3-1v1M5 5h14v14H5V5Z",
 } as const;
 
 export type IconName = keyof typeof paths;

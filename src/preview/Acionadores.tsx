@@ -4,6 +4,7 @@ import { Photo } from "../components/Photo";
 import { PAGE_SIZE, Feedback, Pagination, Tabs, useListParams } from "../operations/List";
 import { Empty, Field, Modal } from "../operations/UI";
 import { Check } from "../operations/UI";
+import { DependeDeEquipamento } from "./Hardware";
 import { AVISO, matches, type PreviewRow } from "./row";
 
 const COLUNAS = ["Acionador", "Dispositivo", "Relay", "Situação", "Ações"];
@@ -69,6 +70,7 @@ export default function Acionadores() {
           <Icon name="plus" /> Novo acionador
         </button>
       </div>
+      <DependeDeEquipamento acoes="Acionar o portão, testar o relay e o indicador de online" />
       <Feedback notice={aviso} error="" onDismiss={() => setAviso("")} />
       <section className="op-panel" aria-label="Lista de acionadores">
         <div className="op-panel-top">

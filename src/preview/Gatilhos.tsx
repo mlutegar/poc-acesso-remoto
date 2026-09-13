@@ -7,66 +7,54 @@ import { Check } from "../operations/UI";
 import { DependeDeEquipamento } from "./Hardware";
 import { AVISO, matches, type PreviewRow } from "./row";
 
-const COLUNAS = ["Câmera", "Servidor", "Canal", "Situação", "Ações"];
+const COLUNAS = ["Gatilho", "Evento", "Ação", "Situação", "Ações"];
 
 const LINHAS: PreviewRow[] = [
   {
     tab: "active",
-    photo: "",
-    kind: "objeto",
-    main: ["Entrada social", "Exibida na portaria e na visita"],
-    cols: ["Servidor P2P 01", "Canal 1"],
-    badge: ["Online", "green"],
-    actions: ["Ver", "Editar", "Histórico"],
+    main: ["Abrir cancela na placa reconhecida", "Somente placas de moradores ativos"],
+    cols: ["Placa reconhecida", "Acionar Cancela de Saída"],
+    badge: ["Ativo", "green"],
+    actions: ["Testar", "Editar", "Histórico"],
   },
   {
     tab: "active",
-    photo: "",
-    kind: "objeto",
-    main: ["Garagem — entrada", "Exibida na portaria"],
-    cols: ["Servidor P2P 01", "Canal 2"],
-    badge: ["Online", "green"],
-    actions: ["Ver", "Editar", "Histórico"],
+    main: ["Abrir portão social no facial liberado", "Atraso de 1 segundo"],
+    cols: ["Facial liberado", "Acionar Portão social"],
+    badge: ["Ativo", "green"],
+    actions: ["Testar", "Editar", "Histórico"],
   },
   {
     tab: "active",
-    photo: "",
-    kind: "objeto",
-    main: ["Garagem — saída", "Vinculada à cancela de saída"],
-    cols: ["Servidor P2P 01", "Canal 3"],
-    badge: ["Online", "green"],
-    actions: ["Ver", "Editar", "Histórico"],
+    main: ["Registrar ocorrência com portão aberto", "Dispara após 5 minutos"],
+    cols: ["Portão aberto por tempo excedido", "Abrir ocorrência automática"],
+    badge: ["Ativo", "green"],
+    actions: ["Testar", "Editar", "Histórico"],
   },
   {
     tab: "active",
-    photo: "",
-    kind: "objeto",
-    main: ["Hall do Bloco 1", "Somente administradores"],
-    cols: ["Servidor P2P 02", "Canal 1"],
-    badge: ["Online", "green"],
-    actions: ["Ver", "Editar", "Histórico"],
+    main: ["Avisar a portaria em recusas seguidas", "Três recusas no mesmo equipamento"],
+    cols: ["Acesso recusado três vezes", "Notificar a portaria"],
+    badge: ["Ativo", "green"],
+    actions: ["Testar", "Editar", "Histórico"],
   },
   {
     tab: "active",
-    photo: "",
-    kind: "objeto",
-    main: ["Portaria de serviço", "Sem prévia no aplicativo"],
-    cols: ["Servidor P2P 02", "Canal 2"],
-    badge: ["Offline", "red"],
-    actions: ["Ver", "Editar", "Histórico"],
+    main: ["Sirene no botão de pânico", "Aciona também a gravação da câmera"],
+    cols: ["Botão de pânico acionado", "Acionar sirene e gravar"],
+    badge: ["Ativo", "green"],
+    actions: ["Testar", "Editar", "Histórico"],
   },
   {
     tab: "history",
-    photo: "",
-    kind: "objeto",
-    main: ["Playground", "Removida na reforma de 07/2026"],
-    cols: ["—", "—"],
-    badge: ["Inativa", "gray"],
+    main: ["Luz da garagem por presença", "Substituído por sensor próprio"],
+    cols: ["Presença na garagem", "Acionar iluminação"],
+    badge: ["Inativo", "gray"],
     actions: ["Histórico"],
   },
 ];
 
-export default function Cameras() {
+export default function Gatilhos() {
   const { query, tab, update, pageOf, goTo, clear } = useListParams();
   const [form, setForm] = useState(false);
   const [aviso, setAviso] = useState("");
@@ -77,27 +65,30 @@ export default function Cameras() {
   return (
     <main className="op-main">
       <div className="op-page-heading">
-        <h1>Câmeras</h1>
+        <h1>Gatilhos</h1>
         <button className="op-button primary" onClick={() => setForm(true)}>
-          <Icon name="plus" /> Nova câmera
+          <Icon name="plus" /> Novo gatilho
         </button>
       </div>
-      <DependeDeEquipamento acoes="Ver a imagem, gerar a URL e a prévia na visita" />
+      <DependeDeEquipamento acoes="O disparo automático das ações" />
       <Feedback notice={aviso} error="" onDismiss={() => setAviso("")} />
-      <section className="op-panel" aria-label="Lista de câmeras">
+      <section className="op-panel" aria-label="Lista de gatilhos">
         <div className="op-panel-top">
           <Tabs
             tab={tab}
             options={[
-              ["active", "Ativas"],
+              ["active", "Ativos"],
               ["history", "Histórico"],
-              ["all", "Todas"],
+              ["all", "Todos"],
             ]}
             onSelect={(v) => update("tab", v)}
           />
           <div className="op-actions">
             <button className="op-button small" onClick={inerte}>
               Acionadores
+            </button>
+            <button className="op-button small" onClick={inerte}>
+              Câmeras
             </button>
             <button className="op-button small" onClick={inerte}>
               Dispositivos
@@ -110,8 +101,8 @@ export default function Cameras() {
               <Icon name="search" />
             </span>
             <input
-              aria-label="Buscar em câmeras"
-              placeholder="Buscar câmera ou servidor…"
+              aria-label="Buscar em gatilhos"
+              placeholder="Buscar gatilho ou evento…"
               value={query}
               onChange={(e) => update("q", e.target.value)}
             />
@@ -172,7 +163,7 @@ export default function Cameras() {
         <Pagination total={visiveis.length} page={pagina} onGo={goTo} />
       </section>
       {form && (
-        <Modal title="Nova câmera" onClose={() => setForm(false)}>
+        <Modal title="Novo gatilho" onClose={() => setForm(false)}>
           <form
             className="op-form"
             onSubmit={(e) => {
@@ -183,30 +174,27 @@ export default function Cameras() {
           >
             <div className="op-form-grid">
               <Field label="Nome" name="nome" />
-              <Field label="Servidor" name="servidor" />
-              <Field label="Canal" name="canal" />
-              <Field label="Marca" name="marca">
-                <option key="Intelbras">Intelbras</option>
-                <option key="Hikvision">Hikvision</option>
-                <option key="Dahua">Dahua</option>
-                <option key="Outra">Outra</option>
+              <Field label="Evento" name="evento">
+                <option key="Placa reconhecida">Placa reconhecida</option>
+                <option key="Facial liberado">Facial liberado</option>
+                <option key="Acesso recusado">Acesso recusado</option>
+                <option key="Portão aberto por tempo excedido">
+                  Portão aberto por tempo excedido
+                </option>
+                <option key="Botão de pânico acionado">Botão de pânico acionado</option>
               </Field>
-              <Field label="IP ou DDNS" name="ip" />
-              <Field label="Porta" name="porta" />
-              <Field label="Usuário" name="usuario" />
-              <Field label="Senha" name="senha" type="password" />
-              <Field label="Acionador vinculado" name="acionador">
-                <option key="Nenhum">Nenhum</option>
+              <Field label="Acionador" name="acionador">
                 <option key="Portão social">Portão social</option>
                 <option key="Portão da garagem">Portão da garagem</option>
                 <option key="Cancela de saída">Cancela de saída</option>
+                <option key="Sirene">Sirene</option>
               </Field>
+              <Field label="Atraso (segundos)" name="atraso" />
             </div>
-
+            <Field label="Observação" name="observacao" type="textarea" />
             <div className="op-checks">
-              <Check label="Exibir na portaria" name="portaria" checked={false} />
-              <Check label="Exibir no aplicativo" name="app" checked={false} />
-              <Check label="Exibir na visita" name="visita" checked={false} />
+              <Check label="Ativo" name="ativo" checked={false} />
+              <Check label="Gravar câmera vinculada" name="gravar" checked={false} />
             </div>
             <footer className="op-form-footer">
               <button type="button" className="op-button" onClick={() => setForm(false)}>
