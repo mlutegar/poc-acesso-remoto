@@ -9,6 +9,7 @@ import MailPage from "./operations/Mail";
 import Issues from "./operations/Issues";
 import Notices from "./operations/Notices";
 import Veiculos from "./pages/Veiculos";
+import CommonAreas from "./operations/CommonAreas";
 import Pets from "./operations/Pets";
 import Bikes from "./operations/Bikes";
 import Rotas from "./preview/Rotas";
@@ -67,6 +68,7 @@ export default function App() {
         <Route path="/eventos" element={<Eventos />} />
         <Route path="/pessoas" element={<Navigate to="/condominos" replace />} />
         <Route path="/veiculos" element={<Veiculos />} />
+        <Route path="/areas-comuns" element={<CommonAreas />} />
         <Route path="/dispositivos" element={<Dispositivos />} />
         <Route path="/animais" element={<Pets />} />
         <Route path="/bicicletas" element={<Bikes />} />

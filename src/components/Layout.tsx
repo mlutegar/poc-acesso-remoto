@@ -15,6 +15,8 @@ export const MENU: MenuItem[] = [
   { label: "Correspondências", to: "/correspondencias" },
   { label: "Condôminos", to: "/condominos" },
   { label: "Residências", to: "/residencias" },
+  { label: "Veículos", to: "/veiculos" },
+  { label: "Áreas comuns", to: "/areas-comuns" },
   { label: "Ocorrências", to: "/ocorrencias" },
   { label: "Comunicados", to: "/comunicados" },
   {

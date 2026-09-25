@@ -17,6 +17,7 @@ A usuária quer reproduzir o aplicativo usado pelo cliente a partir do Shielder 
 - 26 telas de prévia em `src/preview/` (uma por módulo do menu, navegáveis e sem gravação) e espaço de foto nas listagens e cadastros. Cobertura atualizada: 14 parciais, 48 em prévia, 2 simuladas, 13 não iniciadas.
 - Animais e Bicicletas funcionando (versão 3 do arquivo local), mais 6 prévias de equipamento e o aviso explícito em 11 telas. Cobertura: 16 parciais, 59 prévias (19 dependem de equipamento), 2 simuladas, nenhuma não iniciada.
 - Produto renomeado para **Átrio**, com logo em `public/` e paleta medida nela (`#182838` / `#405870`); visual corporativo: barra de marca clara, menu escuro, IBM Plex Sans, caixa normal. Detalhes em `IMPLEMENTACAO-SHIELDER.md`.
+- Veículos agora têm cadastro local vinculado a condômino/unidade, com migração das placas antigas. Áreas comuns têm cadastro e reservas locais. Arquivo local na versão 4; cobertura das 77 rotas: 17 parciais, 59 prévias e 1 simulada. A agenda do Shielder segue pendente de conferência porque não apareceu no perfil web auditado. Detalhes em `IMPLEMENTACAO-SHIELDER.md`.
 - Nenhum formulário foi enviado nem equipamento acionado durante a consulta. Aba devolvida a Comunicados.
 
 ## Como continuar sem repetir a auditoria

@@ -61,25 +61,34 @@ test("bicicleta exige marca e cor, e o código não se repete entre as ativas", 
   validate(d, "bikes", bicicleta({ id: "b2", code: "" }));
 });
 
-test("o formato anterior sobe para a versão 3 sem perder cadastros", () => {
+test("os formatos anteriores sobem para a versão 4 e preservam veículos de condôminos", () => {
   const antigo = demoData();
   antigo.version = 2;
   delete antigo.pets;
   delete antigo.bikes;
+  delete antigo.vehicles;
+  delete antigo.areas;
+  delete antigo.reservations;
   const migrado = migrate(JSON.parse(JSON.stringify(antigo)));
   assert.ok(migrado, "migração de v2 recusada");
-  assert.equal(migrado.version, 3);
+  assert.equal(migrado.version, 4);
   assert.deepEqual(migrado.pets, []);
   assert.deepEqual(migrado.bikes, []);
+  assert.ok(migrado.areas.some((a) => a.name === "Salão de festas"));
+  assert.ok(migrado.areas.some((a) => a.name === "Quadra de areia"));
+  assert.ok(migrado.areas.some((a) => a.name === "Campo de futebol"));
+  assert.deepEqual(migrado.reservations, []);
+  assert.equal(migrado.vehicles.length, antigo.residents.filter((r) => r.plate).length);
+  assert.ok(migrado.vehicles.some((v) => v.plate === "RKF7C21" && v.residentId === "r-01"));
   assert.equal(migrado.residents.length, antigo.residents.length);
 
-  // E o formato original, de antes do bloco 2, ainda sobe direto para v3.
+  // E o formato original, de antes do bloco 2, ainda sobe direto para v4.
   const v1 = seed();
   v1.version = 1;
-  for (const c of ["mail", "issues", "notices", "pets", "bikes"]) delete v1[c];
+  for (const c of ["mail", "issues", "notices", "pets", "bikes", "vehicles", "areas", "reservations"]) delete v1[c];
   const doV1 = migrate(JSON.parse(JSON.stringify(v1)));
   assert.ok(doV1, "migração de v1 recusada");
-  assert.equal(doV1.version, 3);
+  assert.equal(doV1.version, 4);
 });
 
 test("a demonstração traz animais e bicicletas coerentes", () => {

@@ -77,7 +77,7 @@ test("carrega o formato anterior sem descartar os cadastros", () => {
   delete old.notices;
   const upgraded = migrate(JSON.parse(JSON.stringify(old)));
   assert.ok(upgraded);
-  assert.equal(upgraded.version, 3);
+  assert.equal(upgraded.version, 4);
   assert.deepEqual(upgraded.mail, []);
   assert.equal(upgraded.residents.length, old.residents.length);
   assert.equal(migrate({ version: 1, revision: 0 }), null);

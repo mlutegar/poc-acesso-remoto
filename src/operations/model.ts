@@ -138,6 +138,89 @@ export interface Bike {
   notes: string;
   active: boolean;
 }
+export interface Vehicle {
+  id: string;
+  unitId: string;
+  residentId: string;
+  plate: string;
+  model: string;
+  color: string;
+  notes: string;
+  active: boolean;
+}
+export interface CommonArea {
+  id: string;
+  name: string;
+  description: string;
+  capacity: number;
+  opensAt: string;
+  closesAt: string;
+  active: boolean;
+}
+export function defaultCommonAreas(): CommonArea[] {
+  return [
+    {
+      id: "area-salao",
+      name: "Salão de festas",
+      description: "Espaço de eventos do condomínio",
+      capacity: 40,
+      opensAt: "08:00",
+      closesAt: "23:00",
+      active: true,
+    },
+    {
+      id: "area-quadra",
+      name: "Quadra de areia",
+      description: "Para vôlei, beach tennis e outras atividades",
+      capacity: 12,
+      opensAt: "07:00",
+      closesAt: "22:00",
+      active: true,
+    },
+    {
+      id: "area-campo",
+      name: "Campo de futebol",
+      description: "Campo para partidas e treinos",
+      capacity: 22,
+      opensAt: "07:00",
+      closesAt: "22:00",
+      active: true,
+    },
+    {
+      id: "area-churrasqueira",
+      name: "Churrasqueira",
+      description: "Área de convivência",
+      capacity: 15,
+      opensAt: "09:00",
+      closesAt: "22:00",
+      active: true,
+    },
+    {
+      id: "area-gourmet",
+      name: "Espaço gourmet",
+      description: "Espaço para refeições e encontros",
+      capacity: 20,
+      opensAt: "09:00",
+      closesAt: "23:00",
+      active: true,
+    },
+  ];
+}
+export type ReservationStatus = "confirmada" | "cancelada";
+export interface Reservation {
+  id: string;
+  areaId: string;
+  unitId: string;
+  residentId: string;
+  date: string;
+  startsAt: string;
+  endsAt: string;
+  participants: number;
+  notes: string;
+  status: ReservationStatus;
+  createdAt: string;
+  cancelledAt: string;
+}
 export interface Log {
   id: string;
   entityId: string;
@@ -146,7 +229,7 @@ export interface Log {
   message: string;
 }
 export interface Data {
-  version: 3;
+  version: 4;
   revision: number;
   units: Unit[];
   residents: Resident[];
@@ -157,12 +240,36 @@ export interface Data {
   notices: Notice[];
   pets: Pet[];
   bikes: Bike[];
+  vehicles: Vehicle[];
+  areas: CommonArea[];
+  reservations: Reservation[];
   logs: Log[];
 }
 // Cadastros atendidos pelo formulário genérico do bloco 1.
 export type CoreCollection = "units" | "residents" | "permits" | "visits";
-export type Collection = CoreCollection | "mail" | "issues" | "notices" | "pets" | "bikes";
-export type Entity = Unit | Resident | Permit | Visit | Mail | Issue | Notice | Pet | Bike;
+export type Collection =
+  | CoreCollection
+  | "mail"
+  | "issues"
+  | "notices"
+  | "pets"
+  | "bikes"
+  | "vehicles"
+  | "areas"
+  | "reservations";
+export type Entity =
+  | Unit
+  | Resident
+  | Permit
+  | Visit
+  | Mail
+  | Issue
+  | Notice
+  | Pet
+  | Bike
+  | Vehicle
+  | CommonArea
+  | Reservation;
 export const normalize = (s: string) =>
   s
     .normalize("NFD")
@@ -233,6 +340,17 @@ export function noticeState(n: Notice, now = new Date()): NoticeState {
   if (stamp < `${n.start} ${n.startTime}`) return "agendado";
   if (n.end && stamp > `${n.end} ${n.endTime}`) return "finalizado";
   return "ativo";
+}
+const timePattern = /^([01]\d|2[0-3]):[0-5]\d$/;
+function validDate(value: string) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const date = new Date(`${value}T12:00:00Z`);
+  return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value;
+}
+export function reservationState(r: Reservation, now = new Date()) {
+  if (r.status === "cancelada") return "cancelada";
+  const clock = localClock(now);
+  return `${r.date} ${r.endsAt}` < `${clock.date} ${clock.time}` ? "concluida" : "confirmada";
 }
 // Condôminos que receberiam o comunicado, segundo o destino escolhido.
 export function recipients(data: Data, n: Pick<Notice, "audience" | "unitId" | "tenants">) {
@@ -312,6 +430,24 @@ export function validate(data: Data, collection: Collection, item: Entity) {
       throw new Error(
         "Encerre as visitas e inative as pré-autorizações vinculadas antes de inativar ou transferir este condômino."
       );
+    if (
+      previous &&
+      (!r.active || r.unitId !== previous.unitId) &&
+      data.vehicles.some((v) => v.residentId === r.id && v.active)
+    )
+      throw new Error(
+        "Inative ou transfira os veículos vinculados antes de inativar ou transferir este condômino."
+      );
+    if (
+      previous &&
+      (!r.active || r.unitId !== previous.unitId) &&
+      data.reservations.some(
+        (x) => x.residentId === r.id && x.status === "confirmada" && x.date >= localClock().date
+      )
+    )
+      throw new Error(
+        "Cancele as reservas futuras antes de inativar ou transferir este condômino."
+      );
   } else if (collection === "permits") {
     const p = item as Permit;
     responsible(data, p.residentId);
@@ -390,7 +526,7 @@ export function validate(data: Data, collection: Collection, item: Entity) {
     const a = item as Pet;
     if (!a.name.trim() || !a.species.trim()) throw new Error("Preencha o nome e a espécie.");
     belongs(data, a.unitId, a.residentId, a.active);
-  } else {
+  } else if (collection === "bikes") {
     const b = item as Bike;
     if (!b.brand.trim() || !b.color.trim()) throw new Error("Preencha a marca e a cor.");
     belongs(data, b.unitId, b.residentId, b.active);
@@ -399,6 +535,84 @@ export function validate(data: Data, collection: Collection, item: Entity) {
       data.bikes.some((x) => x.id !== b.id && x.active && identity(x.code) === identity(b.code))
     )
       throw new Error("Já existe uma bicicleta ativa com esse código.");
+  } else if (collection === "vehicles") {
+    const v = item as Vehicle;
+    belongs(data, v.unitId, v.residentId, v.active);
+    if (!v.residentId) throw new Error("Selecione o condômino responsável pelo veículo.");
+    if (!/^[A-Z]{3}[0-9][A-Z0-9][0-9]{2}$/.test(v.plate.toUpperCase()))
+      throw new Error("Informe uma placa válida com sete caracteres.");
+    if (!v.model.trim() || !v.color.trim()) throw new Error("Preencha modelo e cor do veículo.");
+    if (
+      v.active &&
+      data.vehicles.some(
+        (x) => x.id !== v.id && x.active && identity(x.plate) === identity(v.plate)
+      )
+    )
+      throw new Error("Já existe um veículo ativo com essa placa.");
+  } else if (collection === "areas") {
+    const a = item as CommonArea;
+    if (!a.name.trim()) throw new Error("Informe o nome da área comum.");
+    if (!Number.isSafeInteger(a.capacity) || a.capacity < 1)
+      throw new Error("Informe uma capacidade de pelo menos uma pessoa.");
+    if (!timePattern.test(a.opensAt) || !timePattern.test(a.closesAt) || a.closesAt <= a.opensAt)
+      throw new Error("Informe um horário de funcionamento válido.");
+    if (data.areas.some((x) => x.id !== a.id && identity(x.name) === identity(a.name)))
+      throw new Error("Já existe uma área comum com esse nome.");
+    if (
+      data.reservations.some(
+        (r) =>
+          r.areaId === a.id &&
+          r.status === "confirmada" &&
+          r.date >= localClock().date &&
+          (!a.active ||
+            r.startsAt < a.opensAt ||
+            r.endsAt > a.closesAt ||
+            r.participants > a.capacity)
+      )
+    )
+      throw new Error("Há reservas futuras incompatíveis. Ajuste ou cancele essas reservas antes.");
+  } else if (collection === "reservations") {
+    const r = item as Reservation;
+    const area = data.areas.find((a) => a.id === r.areaId);
+    if (!area || (!area.active && r.status === "confirmada"))
+      throw new Error("Selecione uma área comum ativa.");
+    const resident = data.residents.find((x) => x.id === r.residentId);
+    if (
+      !resident ||
+      resident.unitId !== r.unitId ||
+      (r.status === "confirmada" &&
+        (!resident.active || !data.units.some((u) => u.id === r.unitId && u.active)))
+    )
+      throw new Error("Selecione um condômino ativo da residência informada.");
+    if (
+      !validDate(r.date) ||
+      !timePattern.test(r.startsAt) ||
+      !timePattern.test(r.endsAt) ||
+      r.endsAt <= r.startsAt
+    )
+      throw new Error("Informe data e horário válidos para a reserva.");
+    if (
+      !Number.isSafeInteger(r.participants) ||
+      r.participants < 1 ||
+      r.participants > area.capacity
+    )
+      throw new Error(`A quantidade de pessoas deve estar entre 1 e ${area.capacity}.`);
+    if (r.status === "confirmada") {
+      if (r.startsAt < area.opensAt || r.endsAt > area.closesAt)
+        throw new Error("A reserva deve ficar dentro do horário de funcionamento da área.");
+      if (
+        data.reservations.some(
+          (x) =>
+            x.id !== r.id &&
+            x.status === "confirmada" &&
+            x.areaId === r.areaId &&
+            x.date === r.date &&
+            r.startsAt < x.endsAt &&
+            x.startsAt < r.endsAt
+        )
+      )
+        throw new Error("Já existe uma reserva desta área nesse horário.");
+    }
   }
 }
 export function transition(
@@ -533,7 +747,7 @@ export function noticeTransition(
 }
 export function seed(): Data {
   return {
-    version: 3,
+    version: 4,
     revision: 0,
     units: [
       {
@@ -598,6 +812,20 @@ export function seed(): Data {
     notices: [],
     pets: [],
     bikes: [],
+    vehicles: [
+      {
+        id: "vehicle-r-demo-1",
+        unitId: "u-demo-1",
+        residentId: "r-demo-1",
+        plate: "ABC1D23",
+        model: "Sedan",
+        color: "Prata",
+        notes: "",
+        active: true,
+      },
+    ],
+    areas: defaultCommonAreas(),
+    reservations: [],
     logs: [],
   };
 }
@@ -605,7 +833,7 @@ export function seed(): Data {
 export function isData(value: unknown): value is Data {
   if (!value || typeof value !== "object") return false;
   const d = value as Data;
-  if (d.version !== 3 || !Number.isSafeInteger(d.revision) || d.revision < 0) return false;
+  if (d.version !== 4 || !Number.isSafeInteger(d.revision) || d.revision < 0) return false;
   const shapes: Record<string, Record<string, string>> = {
     units: {
       id: "string",
@@ -734,6 +962,39 @@ export function isData(value: unknown): value is Data {
       notes: "string",
       active: "boolean",
     },
+    vehicles: {
+      id: "string",
+      unitId: "string",
+      residentId: "string",
+      plate: "string",
+      model: "string",
+      color: "string",
+      notes: "string",
+      active: "boolean",
+    },
+    areas: {
+      id: "string",
+      name: "string",
+      description: "string",
+      capacity: "number",
+      opensAt: "string",
+      closesAt: "string",
+      active: "boolean",
+    },
+    reservations: {
+      id: "string",
+      areaId: "string",
+      unitId: "string",
+      residentId: "string",
+      date: "string",
+      startsAt: "string",
+      endsAt: "string",
+      participants: "number",
+      notes: "string",
+      status: "string",
+      createdAt: "string",
+      cancelledAt: "string",
+    },
     logs: { id: "string", entityId: "string", at: "string", actor: "string", message: "string" },
   };
   for (const [key, shape] of Object.entries(shapes)) {
@@ -775,14 +1036,23 @@ export function isData(value: unknown): value is Data {
     ) &&
     d.issues.every((i) => !i.residentId || d.residents.some((r) => r.id === i.residentId)) &&
     d.notices.every((n) => n.audience !== "unidade" || d.units.some((u) => u.id === n.unitId)) &&
-    [...d.pets, ...d.bikes].every(
+    [...d.pets, ...d.bikes, ...d.vehicles].every(
       (x) =>
         d.units.some((u) => u.id === x.unitId) &&
         (!x.residentId || d.residents.some((r) => r.id === x.residentId && r.unitId === x.unitId))
+    ) &&
+    d.areas.every((a) => Number.isSafeInteger(a.capacity) && a.capacity > 0) &&
+    d.reservations.every(
+      (r) =>
+        ["confirmada", "cancelada"].includes(r.status) &&
+        Number.isSafeInteger(r.participants) &&
+        r.participants > 0 &&
+        d.areas.some((a) => a.id === r.areaId) &&
+        d.residents.some((x) => x.id === r.residentId && x.unitId === r.unitId)
     )
   );
 }
-// Lê o formato gravado antes do bloco 2 sem descartar os cadastros existentes.
+// Atualiza formatos locais antigos sem descartar os cadastros existentes.
 export function migrate(value: unknown): Data | null {
   if (!value || typeof value !== "object") return null;
   const raw = { ...(value as Record<string, unknown>) };
@@ -791,6 +1061,36 @@ export function migrate(value: unknown): Data | null {
   }
   if (raw.version === 2) {
     Object.assign(raw, { version: 3, pets: [], bikes: [] });
+  }
+  if (raw.version === 3) {
+    const residents = raw.residents;
+    if (!Array.isArray(residents)) return null;
+    Object.assign(raw, {
+      version: 4,
+      vehicles: residents
+        .filter(
+          (r): r is Resident =>
+            !!r &&
+            typeof r === "object" &&
+            typeof (r as Resident).plate === "string" &&
+            !!(r as Resident).plate.trim()
+        )
+        .map((r) => ({
+          id: `vehicle-${r.id}`,
+          unitId: r.unitId,
+          residentId: r.id,
+          plate: r.plate.toUpperCase(),
+          model: r.vehicle || "Não informado",
+          color: r.color || "Não informada",
+          notes: "Migrado do cadastro de condômino",
+          active: r.active,
+        })),
+      areas: defaultCommonAreas(),
+      reservations: [],
+    });
+  }
+  if (raw.version === 4 && Array.isArray(raw.areas) && raw.areas.length === 0) {
+    raw.areas = defaultCommonAreas();
   }
   return isData(raw) ? (raw as unknown as Data) : null;
 }

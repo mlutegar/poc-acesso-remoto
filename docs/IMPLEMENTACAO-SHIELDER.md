@@ -181,3 +181,26 @@ Não é só "ligar o aparelho". Precisa de: o modelo instalado em cada ponto de 
 ## O que não mudou
 
 Modelo, regras, gravação, telas e testes. Só CSS, identidade e o markup do cabeçalho. Build, lint e os 30 testes iguais.
+
+# Veículos e áreas comuns — 25/09/2026
+
+## Entregue no protótipo
+
+- `/veiculos`: a listagem fixa de LPR foi substituída por cadastro local de veículos, com placa, modelo, cor, condômino, residência, situação, busca, filtros, CSV e histórico. Um condômino pode ter mais de um veículo. A placa ativa não pode se repetir. O cadastro de condômino passou a apontar para essa lista.
+- Armazenamento local na versão 4: as placas já registradas nos condôminos nas versões anteriores viram veículos vinculados, sem apagar os demais dados. A tela de condôminos passa a exibir os veículos dessa coleção.
+- `/areas-comuns`: cadastro de áreas com capacidade e horário de funcionamento; reservas vinculadas ao condômino e à residência, consulta de ocupação por área/data, edição, cancelamento, filtros, CSV e histórico. Reservas confirmadas não podem se sobrepor, ultrapassar a capacidade ou ficar fora do horário da área. Uma área não pode ser inativada ou reduzida de forma incompatível com reservas futuras.
+- Dados fictícios de demonstração incluem áreas, reservas e veículos migrados das placas dos condôminos.
+
+## Limites e decisão pendente
+
+A auditoria anterior não localizou a agenda/reservas no perfil web do Shielder. As regras acima são decisões explícitas do protótipo, não validações do servidor de referência. Ainda é preciso conferir com o cliente: tipos de agenda, aprovação, antecedência, duração máxima, limites por unidade, convidados, bloqueios e a experiência no app do morador. O acesso automatizado ao Chrome foi solicitado, mas as permissões de Acessibilidade e Gravação de Tela do macOS ainda não estavam liberadas nesta etapa. Nenhuma reserva foi criada no Shielder.
+
+TAG, leitura LPR, abertura de portão, avisos ao app e persistência compartilhada continuam dependentes de integração real. Os registros desta entrega ficam no `localStorage` do navegador, como os demais módulos funcionais da POC.
+
+## Verificação desta entrega
+
+`npm run build`, `npm run lint` e `npm test` passaram (34 testes). No navegador integrado, foram conferidos o menu, a listagem de veículos com placa migrada, os formulários de veículo e área, e o estado inicial de Áreas comuns sem cadastros. Nenhum dado foi gravado no navegador durante essa conferência.
+
+## Áreas de exemplo cadastradas
+
+Foram acrescentadas cinco áreas de demonstração: salão de festas, quadra de areia, campo de futebol, churrasqueira e espaço gourmet. Elas aparecem em demonstrações novas e em arquivos locais antigos que ainda não tinham áreas cadastradas, sem acionar “Recarregar demonstração” ou apagar cadastros existentes. Capacidade, descrição e horários são valores ilustrativos editáveis. O cadastro local foi conferido após recarregar o navegador; `npm run build`, `npm run lint` e `npm test` passaram com 35 testes.

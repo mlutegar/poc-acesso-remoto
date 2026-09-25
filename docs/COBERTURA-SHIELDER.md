@@ -10,9 +10,9 @@ Ele mede **quanto do Shielder já tem equivalente no protótipo**, contando as r
 
 | Situação | Rotas | Do total |
 |---|---:|---:|
-| Parcial | 16 | 21% |
+| Parcial | 17 | 22% |
 | Prévia | 59 | 77% |
-| Simulada | 2 | 3% |
+| Simulada | 1 | 1% |
 | Não iniciada | 0 | 0% |
 | **Total** | **77** | **100%** |
 
@@ -23,11 +23,13 @@ Ele mede **quanto do Shielder já tem equivalente no protótipo**, contando as r
 
 Nenhuma rota está marcada como concluída. Concluir exigiria comparar campo a campo com o sistema real e validar as regras do servidor, o que a auditoria deliberadamente não fez para não afetar a operação do cliente.
 
+O módulo de **Áreas comuns** em `/areas-comuns` não entra nas 77 rotas desta tabela: a agenda/reservas não foi localizada no menu do perfil web auditado. O protótipo já permite cadastrar áreas e fazer reservas locais, mas os campos e limites do Shielder ainda precisam ser conferidos no fluxo usado pelo cliente.
+
 ## Por grupo
 
 | Grupo | Rotas | Parcial | Prévia | Simulada | Não iniciada |
 |---|---:|---:|---:|---:|---:|
-| Operação | 18 | 12 | 5 | 1 | 0 |
+| Operação | 18 | 13 | 5 | 0 | 0 |
 | Comunicação e administração | 12 | 4 | 8 | 0 | 0 |
 | Gestão | 21 | 0 | 21 | 0 | 0 |
 | Relatórios e telefonia | 12 | 0 | 11 | 1 | 0 |
@@ -61,7 +63,7 @@ Nenhuma rota está marcada como concluída. Concluir exigiria comparar campo a c
 | cadastrarMorador | Operação | Condôminos | Parcial | /condominos (bloco 1) | Backend + hardware | Falta foto e geração facial, autorizar app, chave virtual, agenda, rota/turno, validade/atestado, ID externo e endereço de correspondência. |
 | listarResidencias | Operação | Residências | Parcial | /residencias (bloco 1) | Front | Falta filtros de inadimplência e sem app, impressão e os vínculos com animais, bicicletas, ramais e aluguel. |
 | cadastrarResidencia | Operação | Residências | Parcial | /residencias (bloco 1) | Backend | Falta fração ideal, limite de visitantes, bloquear/silenciar Fale Síndico, duplicar notificação, reservas/convites e geolocalização. |
-| listarVeiculosMorador | Operação | Veículos | Simulada | /veiculos (tela de exemplo) | Front | O veículo existe dentro do cadastro de condômino, mas a tela própria ainda usa dados fixos e não se comunica com ele. |
+| listarVeiculosMorador | Operação | Veículos | Parcial | /veiculos (cadastro local) | Backend + hardware | Cadastro, busca, histórico e vínculo com condômino/unidade funcionam. Faltam regras específicas do condomínio, TAG/LPR e sincronização com equipamentos. |
 | listarAnimais | Operação | Animais | Parcial | /animais (bloco 5) | Front | Cadastro funcionando, vinculado à residência e ao condômino. O formulário do original não foi observado na auditoria. |
 | listarBicicletas | Operação | Bicicletas | Parcial | /bicicletas (bloco 5) | Front | Cadastro funcionando, com código único por bicicleta ativa. O formulário do original não foi observado na auditoria. |
 | listarPreAutorizacoes | Operação | Pré-autorizações | Parcial | /pre-autorizacoes (bloco 1) | Front | Falta filtro por período e identidade, exportação e as alternativas Lista e Facial. |

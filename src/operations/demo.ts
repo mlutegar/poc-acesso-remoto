@@ -11,6 +11,7 @@ import type {
   Unit,
   Visit,
 } from "./model";
+import { defaultCommonAreas } from "./model.ts";
 
 // Conjunto de demonstração: um condomínio fictício com movimento de um dia
 // comum de portaria. Serve para apresentar o produto sem usar dado real.
@@ -936,11 +937,12 @@ const buildLogs = (): Log[] => [
 
 /** Condomínio fictício com movimento de portaria, para demonstração. */
 export function demoData(): Data {
+  const residents = buildResidents();
   return {
-    version: 3,
+    version: 4,
     revision: 0,
     units: buildUnits(),
-    residents: buildResidents(),
+    residents,
     permits: buildPermits(),
     visits: buildVisits(),
     mail: buildMails(),
@@ -948,6 +950,63 @@ export function demoData(): Data {
     notices: buildNotices(),
     pets: buildPets(),
     bikes: buildBikes(),
+    vehicles: residents
+      .filter((r) => r.plate)
+      .map((r) => ({
+        id: `vehicle-${r.id}`,
+        unitId: r.unitId,
+        residentId: r.id,
+        plate: r.plate,
+        model: r.vehicle,
+        color: r.color,
+        notes: "",
+        active: r.active,
+      })),
+    areas: defaultCommonAreas(),
+    reservations: [
+      {
+        id: "reservation-demo-1",
+        areaId: "area-salao",
+        unitId: "u-1-101",
+        residentId: "r-01",
+        date: day(3),
+        startsAt: "18:00",
+        endsAt: "22:00",
+        participants: 25,
+        notes: "Aniversário familiar",
+        status: "confirmada",
+        createdAt: at(12),
+        cancelledAt: "",
+      },
+      {
+        id: "reservation-demo-2",
+        areaId: "area-churrasqueira",
+        unitId: "u-2-101",
+        residentId: "r-08",
+        date: day(5),
+        startsAt: "12:00",
+        endsAt: "16:00",
+        participants: 10,
+        notes: "",
+        status: "confirmada",
+        createdAt: at(8),
+        cancelledAt: "",
+      },
+      {
+        id: "reservation-demo-3",
+        areaId: "area-quadra",
+        unitId: "u-1-201",
+        residentId: "r-04",
+        date: day(-2),
+        startsAt: "09:00",
+        endsAt: "10:00",
+        participants: 6,
+        notes: "",
+        status: "confirmada",
+        createdAt: at(100),
+        cancelledAt: "",
+      },
+    ],
     logs: buildLogs(),
   };
 }

@@ -92,7 +92,18 @@ export default function Operations({ kind }: { kind: CoreCollection }) {
       if (kind === "permits" && status === "valid" && !permitValid(row as Permit)) return false;
       return normalize(
         [
-          ...Object.values(row).filter((v) => typeof v === "string"),
+          ...Object.entries(row)
+            .filter(
+              ([key, value]) =>
+                typeof value === "string" &&
+                !(kind === "residents" && ["plate", "vehicle", "color"].includes(key))
+            )
+            .map(([, value]) => value),
+          ...(kind === "residents"
+            ? data.vehicles
+                .filter((v) => v.residentId === row.id)
+                .flatMap((v) => [v.plate, v.model, v.color])
+            : []),
           r?.name || "",
           unitName(u),
         ].join(" ")
@@ -129,7 +140,10 @@ export default function Operations({ kind }: { kind: CoreCollection }) {
           unitName(home(r)),
           r.phone,
           r.email,
-          r.plate,
+          data.vehicles
+            .filter((v) => v.residentId === r.id && v.active)
+            .map((v) => v.plate)
+            .join(", "),
           r.active ? "Sim" : "Não",
         ]),
       ];
@@ -385,7 +399,12 @@ export default function Operations({ kind }: { kind: CoreCollection }) {
                         <td>
                           {r.phone || "Sem telefone"}
                           <small>
-                            {r.plate ? `${r.plate} · ${r.vehicle}` : r.email || "Sem veículo"}
+                            {data.vehicles.some((v) => v.residentId === r.id && v.active)
+                              ? data.vehicles
+                                  .filter((v) => v.residentId === r.id && v.active)
+                                  .map((v) => `${v.plate} · ${v.model}`)
+                                  .join(", ")
+                              : r.email || "Sem veículo"}
                           </small>
                         </td>
                         <td>{badge(r.active)}</td>

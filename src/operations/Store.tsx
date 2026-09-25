@@ -12,6 +12,7 @@ import {
   type Collection,
   type Data,
   type Entity,
+  type Reservation,
 } from "./model";
 
 const KEY = "atrio-operations-v1";
@@ -33,6 +34,7 @@ interface Context {
   actMail: (id: string, action: Parameters<typeof mailTransition>[2], text: string) => void;
   actIssue: (id: string, action: Parameters<typeof issueTransition>[2], text: string) => void;
   actNotice: (id: string, action: Parameters<typeof noticeTransition>[2]) => void;
+  cancelReservation: (id: string) => void;
   reset: () => void;
 }
 const Ctx = createContext<Context | null>(null);
@@ -170,6 +172,23 @@ export function OperationsProvider({ children }: { children: ReactNode }) {
     const labels = { finish: "Comunicado finalizado", reopen: "Comunicado reaberto" };
     change("notices", id, (base) => noticeTransition(base, id, action), labels[action], "");
   }
+  function cancelReservation(id: string) {
+    commit(
+      (base) => {
+        const reservation = base.reservations.find((r) => r.id === id);
+        if (!reservation) throw new Error("Reserva não encontrada.");
+        if (reservation.status !== "confirmada") throw new Error("Esta reserva já foi cancelada.");
+        return {
+          ...base,
+          reservations: base.reservations.map((r): Reservation =>
+            r.id === id ? { ...r, status: "cancelada", cancelledAt: new Date().toISOString() } : r
+          ),
+        };
+      },
+      id,
+      "Reserva cancelada"
+    );
+  }
   // Recarrega o condomínio de demonstração, descartando o que estiver gravado.
   function reset() {
     const next = demoData();
@@ -194,7 +213,9 @@ export function OperationsProvider({ children }: { children: ReactNode }) {
     setError("");
   }
   return (
-    <Ctx.Provider value={{ data, error, save, act, actMail, actIssue, actNotice, reset }}>
+    <Ctx.Provider
+      value={{ data, error, save, act, actMail, actIssue, actNotice, cancelReservation, reset }}
+    >
       {children}
     </Ctx.Provider>
   );

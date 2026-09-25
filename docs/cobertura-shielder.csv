@@ -7,7 +7,7 @@ listarMoradores;Operação;Condôminos;Parcial;/condominos (bloco 1);Front;Falta
 cadastrarMorador;Operação;Condôminos;Parcial;/condominos (bloco 1);Backend + hardware;Falta foto e geração facial, autorizar app, chave virtual, agenda, rota/turno, validade/atestado, ID externo e endereço de correspondência.
 listarResidencias;Operação;Residências;Parcial;/residencias (bloco 1);Front;Falta filtros de inadimplência e sem app, impressão e os vínculos com animais, bicicletas, ramais e aluguel.
 cadastrarResidencia;Operação;Residências;Parcial;/residencias (bloco 1);Backend;Falta fração ideal, limite de visitantes, bloquear/silenciar Fale Síndico, duplicar notificação, reservas/convites e geolocalização.
-listarVeiculosMorador;Operação;Veículos;Simulada;/veiculos (tela de exemplo);Front;O veículo existe dentro do cadastro de condômino, mas a tela própria ainda usa dados fixos e não se comunica com ele.
+listarVeiculosMorador;Operação;Veículos;Parcial;/veiculos (cadastro local);Backend + hardware;Cadastro, busca, histórico e vínculo com condômino/unidade funcionam. Faltam regras específicas do condomínio, TAG/LPR e sincronização com equipamentos.
 listarAnimais;Operação;Animais;Parcial;/animais (bloco 5);Front;Cadastro funcionando, vinculado à residência e ao condômino. O formulário do original não foi observado na auditoria.
 listarBicicletas;Operação;Bicicletas;Parcial;/bicicletas (bloco 5);Front;Cadastro funcionando, com código único por bicicleta ativa. O formulário do original não foi observado na auditoria.
 listarPreAutorizacoes;Operação;Pré-autorizações;Parcial;/pre-autorizacoes (bloco 1);Front;Falta filtro por período e identidade, exportação e as alternativas Lista e Facial.

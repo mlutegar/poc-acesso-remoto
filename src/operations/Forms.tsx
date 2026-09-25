@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from "react";
+import { Link } from "react-router-dom";
 import { useOperations } from "./Store";
 import {
   localClock,
@@ -77,9 +78,9 @@ export function Editor({
           relationship: s("relationship"),
           owner: b("owner"),
           principal: b("principal"),
-          plate: s("plate").toUpperCase(),
-          vehicle: s("vehicle"),
-          color: s("color"),
+          plate: resident?.plate || "",
+          vehicle: resident?.vehicle || "",
+          color: resident?.color || "",
           notes: s("notes"),
           active: b("active"),
         });
@@ -185,12 +186,18 @@ export function Editor({
               />
               <Check label="Ativo" name="active" checked={resident?.active ?? true} />
             </div>
-            <div className="op-section-label">Veículo</div>
-            <div className="op-form-grid">
-              <Field label="Placa" name="plate" value={resident?.plate} />
-              <Field label="Modelo" name="vehicle" value={resident?.vehicle} />
-              <Field label="Cor" name="color" value={resident?.color} />
-            </div>
+            <p className="op-hint">
+              Os veículos são cadastrados no módulo Veículos, com vínculo a este condômino e à
+              residência.{" "}
+              {resident && (
+                <Link
+                  className="op-text-button"
+                  to={`/veiculos?q=${encodeURIComponent(resident.name)}`}
+                >
+                  Ver veículos deste condômino →
+                </Link>
+              )}
+            </p>
             <Field
               label="Observação interna"
               name="notes"
