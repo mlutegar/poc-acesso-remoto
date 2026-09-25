@@ -16,9 +16,6 @@ npm run format    # Prettier
 npm run typecheck # tsc --noEmit
 ```
 
-## Publicação
-O push para `main` executa testes, lint e build e, com GitHub Pages habilitado para GitHub Actions, publica a pasta `dist` em `https://mlutegar.github.io/poc-acesso-remoto/`. O roteamento usa a base do Pages e uma cópia de `index.html` como fallback para links diretos. O login é simulado e os cadastros ficam apenas no `localStorage` de cada navegador; não há sincronização entre usuários.
-
 ## Funcionalidades
 - **Portaria local (primeiro bloco Shielder)**: residências, condôminos, visitas e pré-autorizações, com cadastros relacionados, persistência local, filtros, CSV e histórico. Veja [escopo e validação](docs/IMPLEMENTACAO-SHIELDER.md). A página inicial agora é `/visitas`; o painel simulado anterior está em `/operacao`.
 - **Veículos e áreas comuns**: veículos vinculados a condôminos e unidades; cinco áreas de exemplo (salão de festas, quadra de areia, campo de futebol, churrasqueira e espaço gourmet), com capacidade e horário editáveis; reservas com verificação de conflitos, cancelamento e histórico. A migração local preserva placas cadastradas anteriormente. Regras do Shielder para reservas ainda dependem da conferência do fluxo real.
